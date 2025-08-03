@@ -3,6 +3,7 @@ using ScriptEngine.Machine.Contexts;
 using ScriptEngine.Machine;
 using Raylib_cs;
 using System.Numerics;
+using Castle.DynamicProxy;
 
 namespace raylibos;
 
@@ -67,9 +68,9 @@ public class Raylibos : AutoContext<Raylibos>
     }
 
     [ContextMethod("НарисоватьТекст", "DrawText")]
-    public void DrawText(string text, int posX, int posY, int fontSize, IValue color)
+    public void DrawText(string text, int posX, int posY, int fontSize, Color_OS color)
     {
-        Raylib.DrawText(text, posX, posY, fontSize, IValueToColor(color));
+        Raylib.DrawText(text, posX, posY, fontSize, color);
     }
 
     [ContextMethod("НарисоватьКруг", "DrawCircle")]
