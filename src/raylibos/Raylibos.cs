@@ -2,6 +2,7 @@
 using ScriptEngine.Machine.Contexts;
 using ScriptEngine.Machine;
 using Raylib_cs;
+using System.Numerics;
 
 namespace raylibos;
 
@@ -13,6 +14,20 @@ public class Raylibos : AutoContext<Raylibos>
     public static Raylibos Constructor()
     {
         return new Raylibos();
+    }
+
+    [ContextMethod("НовыйЦвет", "NewColor")]
+    public IValue NewColor(int r, int g, int b, int a)
+    {
+        Color color = new Color(Convert.ToByte(r), Convert.ToByte(g), Convert.ToByte(b), Convert.ToByte(a));
+        return COMWrapperContext.Create(color);
+    }
+
+    [ContextMethod("НовыйВектор", "NewVector2")]
+    public IValue NewVector2(IValue x, IValue y)
+    {
+        Vector2 vector = new Vector2(IValueToFloat(x), IValueToFloat(y));
+        return COMWrapperContext.Create(vector);
     }
 
     [ContextMethod("ИнициализацияОкна", "InitWindow")]
@@ -43,13 +58,6 @@ public class Raylibos : AutoContext<Raylibos>
     public void CloseWindow()
     {
         Raylib.CloseWindow();
-    }
-
-    [ContextMethod("НовыйЦвет", "NewColor")]
-    public IValue NewColor(int r, int g, int b, int a)
-    {
-        Color color = new Color(Convert.ToByte(r), Convert.ToByte(g), Convert.ToByte(b), Convert.ToByte(a));
-        return COMWrapperContext.Create(color);
     }
 
     [ContextMethod("ОчиститьФон", "ClearBackground")]
@@ -118,6 +126,18 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawRectangleGradientH(posX, posY, width, height, IValueToColor(left), IValueToColor(right));
     }
 
+    [ContextMethod("НарисоватьТреугольник", "DrawTriangle")]
+    public void DrawTriangle(IValue v1, IValue v2, IValue v3, IValue color)
+    {
+        Raylib.DrawTriangle(IValueToVector2(v1), IValueToVector2(v2), IValueToVector2(v3), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьТреугольникЛиния", "DrawTriangleLines")]
+    public void DrawTriangleLines(IValue v1, IValue v2, IValue v3, IValue color)
+    {
+        Raylib.DrawTriangleLines(IValueToVector2(v1), IValueToVector2(v2), IValueToVector2(v3), IValueToColor(color));
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
@@ -130,5 +150,10 @@ public class Raylibos : AutoContext<Raylibos>
         object obj = COMWrapperContext.MarshalIValue(floatValue);
         decimal d = (decimal)obj;
         return (float)d;
+    }
+
+    private Vector2 IValueToVector2(IValue vector2)
+    {
+        return (Vector2)COMWrapperContext.MarshalIValue(vector2);
     }
 }
