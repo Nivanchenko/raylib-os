@@ -58,14 +58,53 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.ClearBackground(IValueToColor(color));
     }
 
-     [ContextMethod("НарисоватьТекст", "DrawText")]
+    [ContextMethod("НарисоватьТекст", "DrawText")]
     public void DrawText(string text, int posX, int posY, int fontSize, IValue color)
     {
         Raylib.DrawText(text, posX, posY, fontSize, IValueToColor(color));
     }
 
+    [ContextMethod("НарисоватьКруг", "DrawCircle")]
+    public void DrawCircle(int centerX, int centerY, IValue radius, IValue color)
+    {
+        Raylib.DrawCircle(centerX, centerY, IValueToFloat(radius), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьКругГрадиент", "DrawCircleGradient")]
+    public void DrawCircleGradient(int centerX, int centerY, IValue radius, IValue inner, IValue outer)
+    {
+        Raylib.DrawCircleGradient(centerX, centerY, IValueToFloat(radius), IValueToColor(inner), IValueToColor(outer));
+    }
+
+    [ContextMethod("НарисоватьКругЛиния", "DrawCircleLines")]
+    public void DrawCircleLines(int centerX, int centerY, IValue radius, IValue color)
+    {
+        Raylib.DrawCircleLines(centerX, centerY, IValueToFloat(radius), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьЭллипс", "DrawEllipse")]
+    public void DrawEllipse(int centerX, int centerY, IValue radiusH, IValue radiusV, IValue color)
+    {
+        Raylib.DrawEllipse(centerX, centerY, IValueToFloat(radiusH), IValueToFloat(radiusV), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьЭллипсЛиния", "DrawEllipseLines")]
+    public void DrawEllipseLines(int centerX, int centerY, IValue radiusH, IValue radiusV, IValue color)
+    {
+        Raylib.DrawEllipseLines(centerX, centerY, IValueToFloat(radiusH), IValueToFloat(radiusV), IValueToColor(color));
+    }
+
+    // Вспомогательные функции
+
     private Color IValueToColor(IValue color)
     {
         return (Color)COMWrapperContext.MarshalIValue(color);
+    }
+
+    private float IValueToFloat(IValue floatValue)
+    {
+        object obj = COMWrapperContext.MarshalIValue(floatValue);
+        decimal d = (decimal)obj;
+        return (float)d;
     }
 }
