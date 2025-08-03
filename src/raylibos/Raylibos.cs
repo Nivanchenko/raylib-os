@@ -17,13 +17,6 @@ public class Raylibos : AutoContext<Raylibos>
         return new Raylibos();
     }
 
-    [ContextMethod("НовыйЦвет", "NewColor")]
-    public IValue NewColor(int r, int g, int b, int a)
-    {
-        Color color = new Color(Convert.ToByte(r), Convert.ToByte(g), Convert.ToByte(b), Convert.ToByte(a));
-        return COMWrapperContext.Create(color);
-    }
-
     [ContextMethod("НовыйВектор", "NewVector2")]
     public IValue NewVector2(IValue x, IValue y)
     {
@@ -62,9 +55,9 @@ public class Raylibos : AutoContext<Raylibos>
     }
 
     [ContextMethod("ОчиститьФон", "ClearBackground")]
-    public void ClearBackground(IValue color)
+    public void ClearBackground(Color_OS color)
     {
-        Raylib.ClearBackground(IValueToColor(color));
+        Raylib.ClearBackground(color);
     }
 
     [ContextMethod("НарисоватьТекст", "DrawText")]
@@ -74,83 +67,78 @@ public class Raylibos : AutoContext<Raylibos>
     }
 
     [ContextMethod("НарисоватьКруг", "DrawCircle")]
-    public void DrawCircle(int centerX, int centerY, IValue radius, IValue color)
+    public void DrawCircle(int centerX, int centerY, IValue radius, Color_OS color)
     {
-        Raylib.DrawCircle(centerX, centerY, IValueToFloat(radius), IValueToColor(color));
+        Raylib.DrawCircle(centerX, centerY, IValueToFloat(radius), color);
     }
 
     [ContextMethod("НарисоватьКругГрадиент", "DrawCircleGradient")]
-    public void DrawCircleGradient(int centerX, int centerY, IValue radius, IValue inner, IValue outer)
+    public void DrawCircleGradient(int centerX, int centerY, IValue radius, Color_OS inner, Color_OS outer)
     {
-        Raylib.DrawCircleGradient(centerX, centerY, IValueToFloat(radius), IValueToColor(inner), IValueToColor(outer));
+        Raylib.DrawCircleGradient(centerX, centerY, IValueToFloat(radius), inner, outer);
     }
 
     [ContextMethod("НарисоватьКругЛиния", "DrawCircleLines")]
-    public void DrawCircleLines(int centerX, int centerY, IValue radius, IValue color)
+    public void DrawCircleLines(int centerX, int centerY, IValue radius, Color_OS color)
     {
-        Raylib.DrawCircleLines(centerX, centerY, IValueToFloat(radius), IValueToColor(color));
+        Raylib.DrawCircleLines(centerX, centerY, IValueToFloat(radius), color);
     }
 
     [ContextMethod("НарисоватьЭллипс", "DrawEllipse")]
-    public void DrawEllipse(int centerX, int centerY, IValue radiusH, IValue radiusV, IValue color)
+    public void DrawEllipse(int centerX, int centerY, IValue radiusH, IValue radiusV, Color_OS color)
     {
-        Raylib.DrawEllipse(centerX, centerY, IValueToFloat(radiusH), IValueToFloat(radiusV), IValueToColor(color));
+        Raylib.DrawEllipse(centerX, centerY, IValueToFloat(radiusH), IValueToFloat(radiusV), color);
     }
 
     [ContextMethod("НарисоватьЭллипсЛиния", "DrawEllipseLines")]
-    public void DrawEllipseLines(int centerX, int centerY, IValue radiusH, IValue radiusV, IValue color)
+    public void DrawEllipseLines(int centerX, int centerY, IValue radiusH, IValue radiusV, Color_OS color)
     {
-        Raylib.DrawEllipseLines(centerX, centerY, IValueToFloat(radiusH), IValueToFloat(radiusV), IValueToColor(color));
+        Raylib.DrawEllipseLines(centerX, centerY, IValueToFloat(radiusH), IValueToFloat(radiusV), color);
     }
 
     [ContextMethod("НарисоватьПрямоугольник", "DrawRectangle")]
-    public void DrawRectangle(int posX, int posY, int width, int height, IValue color)
+    public void DrawRectangle(int posX, int posY, int width, int height, Color_OS color)
     {
-        Raylib.DrawRectangle(posX, posY, width, height, IValueToColor(color));
+        Raylib.DrawRectangle(posX, posY, width, height, color);
     }
 
     [ContextMethod("НарисоватьПрямоугольникЛиния", "DrawRectangleLines")]
-    public void DrawRectangleLines(int posX, int posY, int width, int height, IValue color)
+    public void DrawRectangleLines(int posX, int posY, int width, int height, Color_OS color)
     {
-        Raylib.DrawRectangleLines(posX, posY, width, height, IValueToColor(color));
+        Raylib.DrawRectangleLines(posX, posY, width, height, color);
     }
 
     [ContextMethod("НарисоватьПрямоугольникГрадиентВертикальный", "DrawRectangleGradientV")]
-    public void DrawRectangleGradientV(int posX, int posY, int width, int height, IValue top, IValue bottom)
+    public void DrawRectangleGradientV(int posX, int posY, int width, int height, Color_OS top, Color_OS bottom)
     {
-        Raylib.DrawRectangleGradientV(posX, posY, width, height, IValueToColor(top), IValueToColor(bottom));
+        Raylib.DrawRectangleGradientV(posX, posY, width, height, top, bottom);
     }
 
     [ContextMethod("НарисоватьПрямоугольникГрадиентГоризонтальный", "DrawRectangleGradientH")]
-    public void DrawRectangleGradientH(int posX, int posY, int width, int height, IValue left, IValue right)
+    public void DrawRectangleGradientH(int posX, int posY, int width, int height, Color_OS left, Color_OS right)
     {
-        Raylib.DrawRectangleGradientH(posX, posY, width, height, IValueToColor(left), IValueToColor(right));
+        Raylib.DrawRectangleGradientH(posX, posY, width, height, left, right);
     }
 
     [ContextMethod("НарисоватьТреугольник", "DrawTriangle")]
-    public void DrawTriangle(IValue v1, IValue v2, IValue v3, IValue color)
+    public void DrawTriangle(IValue v1, IValue v2, IValue v3, Color_OS color)
     {
-        Raylib.DrawTriangle(IValueToVector2(v1), IValueToVector2(v2), IValueToVector2(v3), IValueToColor(color));
+        Raylib.DrawTriangle(IValueToVector2(v1), IValueToVector2(v2), IValueToVector2(v3), color);
     }
 
     [ContextMethod("НарисоватьТреугольникЛиния", "DrawTriangleLines")]
-    public void DrawTriangleLines(IValue v1, IValue v2, IValue v3, IValue color)
+    public void DrawTriangleLines(IValue v1, IValue v2, IValue v3, Color_OS color)
     {
-        Raylib.DrawTriangleLines(IValueToVector2(v1), IValueToVector2(v2), IValueToVector2(v3), IValueToColor(color));
+        Raylib.DrawTriangleLines(IValueToVector2(v1), IValueToVector2(v2), IValueToVector2(v3), color);
     }
 
     [ContextMethod("НарисоватьЛинию", "DrawLine")]
-    public void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, IValue color)
+    public void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, Color_OS color)
     {
-        Raylib.DrawLine(startPosX, startPosY, endPosX, endPosY, IValueToColor(color));
+        Raylib.DrawLine(startPosX, startPosY, endPosX, endPosY, color);
     }
 
     // Вспомогательные функции
-
-    private Color IValueToColor(IValue color)
-    {
-        return (Color)COMWrapperContext.MarshalIValue(color);
-    }
 
     private float IValueToFloat(IValue floatValue)
     {
