@@ -38,10 +38,34 @@ public class Raylibos : AutoContext<Raylibos>
     {
         Raylib.EndDrawing();
     }
-    
+
     [ContextMethod("ЗакрытьОкно", "CloseWindow")]
     public void CloseWindow()
     {
         Raylib.CloseWindow();
+    }
+
+    [ContextMethod("НовыйЦвет", "NewColor")]
+    public IValue NewColor(int r, int g, int b, int a)
+    {
+        Color color = new Color(Convert.ToByte(r), Convert.ToByte(g), Convert.ToByte(b), Convert.ToByte(a));
+        return COMWrapperContext.Create(color);
+    }
+
+    [ContextMethod("ОчиститьФон", "ClearBackground")]
+    public void ClearBackground(IValue color)
+    {
+        Raylib.ClearBackground(IValueToColor(color));
+    }
+
+     [ContextMethod("НарисоватьТекст", "DrawText")]
+    public void DrawText(string text, int posX, int posY, int fontSize, IValue color)
+    {
+        Raylib.DrawText(text, posX, posY, fontSize, IValueToColor(color));
+    }
+
+    private Color IValueToColor(IValue color)
+    {
+        return (Color)COMWrapperContext.MarshalIValue(color);
     }
 }
