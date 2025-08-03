@@ -94,6 +94,30 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawEllipseLines(centerX, centerY, IValueToFloat(radiusH), IValueToFloat(radiusV), IValueToColor(color));
     }
 
+    [ContextMethod("НарисоватьПрямоугольник", "DrawRectangle")]
+    public void DrawRectangle(int posX, int posY, int width, int height, IValue color)
+    {
+        Raylib.DrawRectangle(posX, posY, width, height, IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьПрямоугольникЛиния", "DrawRectangleLines")]
+    public void DrawRectangleLines(int posX, int posY, int width, int height, IValue color)
+    {
+        Raylib.DrawRectangleLines(posX, posY, width, height, IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьПрямоугольникГрадиентВертикальный", "DrawRectangleGradientV")]
+    public void DrawRectangleGradientV(int posX, int posY, int width, int height, IValue top, IValue bottom)
+    {
+        Raylib.DrawRectangleGradientV(posX, posY, width, height, IValueToColor(top), IValueToColor(bottom));
+    }
+
+    [ContextMethod("НарисоватьПрямоугольникГрадиентГоризонтальный", "DrawRectangleGradientH")]
+    public void DrawRectangleGradientH(int posX, int posY, int width, int height, IValue left, IValue right)
+    {
+        Raylib.DrawRectangleGradientH(posX, posY, width, height, IValueToColor(left), IValueToColor(right));
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
