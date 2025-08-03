@@ -9,11 +9,11 @@ namespace raylibos;
 [ContextClass("ЦветРЛ", "ColorRL")]
 public class Color_OS : AutoContext<Color_OS>
 {
-    private Color _originalColor;
+    private Color _originalObject;
 
-    public Color_OS(Color originalColor)
+    public Color_OS(Color originalObject)
     {
-        _originalColor = originalColor;
+        _originalObject = originalObject;
     }
 
     public Color_OS()
@@ -31,5 +31,5 @@ public class Color_OS : AutoContext<Color_OS>
     }
 
     public static implicit operator Color(Color_OS wrapper)
-        => wrapper._originalColor;
+        => wrapper._originalObject;
 }
