@@ -18,6 +18,7 @@ packages/
 
 /src/**/*.exe
 /src/**/*.dll
+!/src/raylibos/dependency/**
 !/src/packages/**/*.dll
 *_i.c
 *_p.c
