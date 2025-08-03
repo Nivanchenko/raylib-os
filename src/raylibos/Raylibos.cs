@@ -138,6 +138,12 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawTriangleLines(IValueToVector2(v1), IValueToVector2(v2), IValueToVector2(v3), IValueToColor(color));
     }
 
+    [ContextMethod("НарисоватьЛинию", "DrawLine")]
+    public void DrawLine(int startPosX, int startPosY, int endPosX, int endPosY, IValue color)
+    {
+        Raylib.DrawLine(startPosX, startPosY, endPosX, endPosY, IValueToColor(color));
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
