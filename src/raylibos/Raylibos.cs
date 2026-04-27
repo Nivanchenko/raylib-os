@@ -30,6 +30,20 @@ public class Raylibos : AutoContext<Raylibos>
         return COMWrapperContext.Create(vector);
     }
 
+    [ContextMethod("ВекторX", "Vector2X")]
+    public decimal Vector2X(IValue vector)
+    {
+        Vector2 v = IValueToVector2(vector);
+        return (decimal)v.X;
+    }
+
+    [ContextMethod("ВекторY", "Vector2Y")]
+    public decimal Vector2Y(IValue vector)
+    {
+        Vector2 v = IValueToVector2(vector);
+        return (decimal)v.Y;
+    }
+
     [ContextMethod("ИнициализацияОкна", "InitWindow")]
     public void InitWindow(string title, int width, int height)
     {
@@ -211,6 +225,37 @@ public class Raylibos : AutoContext<Raylibos>
     public bool IsKeyDown(int key)
     {
         return Raylib.IsKeyDown((KeyboardKey)key);
+    }
+
+    [ContextMethod("ПозицияМыши", "GetMousePosition")]
+    public IValue GetMousePosition()
+    {
+        Vector2 pos = Raylib.GetMousePosition();
+        return COMWrapperContext.Create(pos);
+    }
+
+    [ContextMethod("КнопкаМышиНажата", "IsMouseButtonPressed")]
+    public bool IsMouseButtonPressed(int button)
+    {
+        return Raylib.IsMouseButtonPressed((MouseButton)button);
+    }
+
+    [ContextMethod("КурсорСкрыт", "IsCursorHidden")]
+    public bool IsCursorHidden()
+    {
+        return Raylib.IsCursorHidden();
+    }
+
+    [ContextMethod("ПоказатьКурсор", "ShowCursor")]
+    public void ShowCursor()
+    {
+        Raylib.ShowCursor();
+    }
+
+    [ContextMethod("СкрытьКурсор", "HideCursor")]
+    public void HideCursor()
+    {
+        Raylib.HideCursor();
     }
 
     // Вспомогательные функции
