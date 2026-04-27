@@ -2,6 +2,7 @@ packages/
 
 .vs/
 .idea/
+.vscode/
 
 *.vssscc
 *.vspscc
