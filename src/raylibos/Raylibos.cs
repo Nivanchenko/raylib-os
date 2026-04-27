@@ -144,6 +144,24 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawLine(startPosX, startPosY, endPosX, endPosY, IValueToColor(color));
     }
 
+    [ContextMethod("НарисоватьПолигон", "DrawPoly")]
+    public void DrawPoly(IValue center, int sides, IValue radius, IValue rotation, IValue color)
+    {
+        Raylib.DrawPoly(IValueToVector2(center), sides, IValueToFloat(radius), IValueToFloat(rotation), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьПолигонЛиния", "DrawPolyLines")]
+    public void DrawPolyLines(IValue center, int sides, IValue radius, IValue rotation, IValue color)
+    {
+        Raylib.DrawPolyLines(IValueToVector2(center), sides, IValueToFloat(radius), IValueToFloat(rotation), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьПолигонЛинияТолстый", "DrawPolyLinesEx")]
+    public void DrawPolyLinesEx(IValue center, int sides, IValue radius, IValue rotation, IValue thickness, IValue color)
+    {
+        Raylib.DrawPolyLinesEx(IValueToVector2(center), sides, IValueToFloat(radius), IValueToFloat(rotation), IValueToFloat(thickness), IValueToColor(color));
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
