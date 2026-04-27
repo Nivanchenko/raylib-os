@@ -162,6 +162,51 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawPolyLinesEx(IValueToVector2(center), sides, IValueToFloat(radius), IValueToFloat(rotation), IValueToFloat(thickness), IValueToColor(color));
     }
 
+    [ContextMethod("НовыйВектор3", "NewVector3")]
+    public IValue NewVector3(IValue x, IValue y, IValue z)
+    {
+        Vector3 vector = new Vector3(IValueToFloat(x), IValueToFloat(y), IValueToFloat(z));
+        return COMWrapperContext.Create(vector);
+    }
+
+    [ContextMethod("НоваяКамера3D", "NewCamera3D")]
+    public IValue NewCamera3D(IValue position, IValue target, IValue up, IValue fovy, int projection)
+    {
+        Camera3D camera = new Camera3D
+        {
+            Position = IValueToVector3(position),
+            Target = IValueToVector3(target),
+            Up = IValueToVector3(up),
+            FovY = IValueToFloat(fovy),
+            Projection = (CameraProjection)projection
+        };
+        return COMWrapperContext.Create(camera);
+    }
+
+    [ContextMethod("НачатьРежим3D", "BeginMode3D")]
+    public void BeginMode3D(IValue camera)
+    {
+        Raylib.BeginMode3D(IValueToCamera3D(camera));
+    }
+
+    [ContextMethod("ЗакончитьРежим3D", "EndMode3D")]
+    public void EndMode3D()
+    {
+        Raylib.EndMode3D();
+    }
+
+    [ContextMethod("НарисоватьКуб", "DrawCube")]
+    public void DrawCube(IValue position, IValue width, IValue height, IValue length, IValue color)
+    {
+        Raylib.DrawCube(IValueToVector3(position), IValueToFloat(width), IValueToFloat(height), IValueToFloat(length), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьКубЛиния", "DrawCubeWires")]
+    public void DrawCubeWires(IValue position, IValue width, IValue height, IValue length, IValue color)
+    {
+        Raylib.DrawCubeWires(IValueToVector3(position), IValueToFloat(width), IValueToFloat(height), IValueToFloat(length), IValueToColor(color));
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
@@ -179,5 +224,15 @@ public class Raylibos : AutoContext<Raylibos>
     private Vector2 IValueToVector2(IValue vector2)
     {
         return (Vector2)COMWrapperContext.MarshalIValue(vector2);
+    }
+
+    private Vector3 IValueToVector3(IValue vector3)
+    {
+        return (Vector3)COMWrapperContext.MarshalIValue(vector3);
+    }
+
+    private Camera3D IValueToCamera3D(IValue camera)
+    {
+        return (Camera3D)COMWrapperContext.MarshalIValue(camera);
     }
 }
