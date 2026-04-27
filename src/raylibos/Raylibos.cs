@@ -252,6 +252,88 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.ShowCursor();
     }
 
+    [ContextMethod("Камера2DЦель", "Camera2DTarget")]
+    public IValue Camera2DTarget(IValue camera)
+    {
+        Camera2D cam = (Camera2D)COMWrapperContext.MarshalIValue(camera);
+        return COMWrapperContext.Create(cam.Target);
+    }
+
+    [ContextMethod("Камера2DСмещение", "Camera2DOffset")]
+    public IValue Camera2DOffset(IValue camera)
+    {
+        Camera2D cam = (Camera2D)COMWrapperContext.MarshalIValue(camera);
+        return COMWrapperContext.Create(cam.Offset);
+    }
+
+    [ContextMethod("Камера2DВращение", "Camera2DRotation")]
+    public decimal Camera2DRotation(IValue camera)
+    {
+        Camera2D cam = (Camera2D)COMWrapperContext.MarshalIValue(camera);
+        return (decimal)cam.Rotation;
+    }
+
+    [ContextMethod("Камера2DЗум", "Camera2DZoom")]
+    public decimal Camera2DZoom(IValue camera)
+    {
+        Camera2D cam = (Camera2D)COMWrapperContext.MarshalIValue(camera);
+        return (decimal)cam.Zoom;
+    }
+
+    [ContextMethod("ОбновитьКамеру2D", "UpdateCamera2D")]
+    public IValue UpdateCamera2D(IValue camera, IValue target = null, IValue offset = null, IValue rotation = null, IValue zoom = null)
+    {
+        Camera2D cam = (Camera2D)COMWrapperContext.MarshalIValue(camera);
+        if (target != null) cam.Target = IValueToVector2(target);
+        if (offset != null) cam.Offset = IValueToVector2(offset);
+        if (rotation != null) cam.Rotation = IValueToFloat(rotation);
+        if (zoom != null) cam.Zoom = IValueToFloat(zoom);
+        return COMWrapperContext.Create(cam);
+    }
+
+    [ContextMethod("НоваяКамера2D", "NewCamera2D")]
+    public IValue NewCamera2D(IValue target, IValue offset, IValue rotation, IValue zoom)
+    {
+        Camera2D camera = new Camera2D
+        {
+            Target = IValueToVector2(target),
+            Offset = IValueToVector2(offset),
+            Rotation = IValueToFloat(rotation),
+            Zoom = IValueToFloat(zoom)
+        };
+        return COMWrapperContext.Create(camera);
+    }
+
+    [ContextMethod("НачатьРежим2D", "BeginMode2D")]
+    public void BeginMode2D(IValue camera)
+    {
+        Raylib.BeginMode2D(IValueToCamera2D(camera));
+    }
+
+    [ContextMethod("ЗакончитьРежим2D", "EndMode2D")]
+    public void EndMode2D()
+    {
+        Raylib.EndMode2D();
+    }
+
+    [ContextMethod("ПозицияКолесаМыши", "GetMouseWheelMove")]
+    public decimal GetMouseWheelMove()
+    {
+        return (decimal)Raylib.GetMouseWheelMove();
+    }
+
+    [ContextMethod("Случайное", "GetRandomValue")]
+    public int GetRandomValue(int min, int max)
+    {
+        return Raylib.GetRandomValue(min, max);
+    }
+
+    [ContextMethod("УстановитьЧастотуКадров", "SetTargetFPS")]
+    public void SetTargetFPS(int fps)
+    {
+        Raylib.SetTargetFPS(fps);
+    }
+
     [ContextMethod("СкрытьКурсор", "HideCursor")]
     public void HideCursor()
     {
@@ -285,5 +367,10 @@ public class Raylibos : AutoContext<Raylibos>
     private Camera3D IValueToCamera3D(IValue camera)
     {
         return (Camera3D)COMWrapperContext.MarshalIValue(camera);
+    }
+
+    private Camera2D IValueToCamera2D(IValue camera)
+    {
+        return (Camera2D)COMWrapperContext.MarshalIValue(camera);
     }
 }
