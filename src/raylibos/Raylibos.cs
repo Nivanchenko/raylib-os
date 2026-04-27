@@ -207,6 +207,12 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawCubeWires(IValueToVector3(position), IValueToFloat(width), IValueToFloat(height), IValueToFloat(length), IValueToColor(color));
     }
 
+    [ContextMethod("КлавишаНажата", "IsKeyDown")]
+    public bool IsKeyDown(int key)
+    {
+        return Raylib.IsKeyDown((KeyboardKey)key);
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
