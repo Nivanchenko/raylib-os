@@ -245,6 +245,59 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawCubeWires(IValueToVector3(position), IValueToFloat(width), IValueToFloat(height), IValueToFloat(length), IValueToColor(color));
     }
 
+    [ContextMethod("ЗагрузитьМодель", "LoadModel")]
+    public IValue LoadModel(string fileName)
+    {
+        Model model = Raylib.LoadModel(fileName);
+        return COMWrapperContext.Create(model);
+    }
+
+    [ContextMethod("ВыгрузитьМодель", "UnloadModel")]
+    public void UnloadModel(IValue model)
+    {
+        Raylib.UnloadModel(IValueToModel(model));
+    }
+
+    [ContextMethod("УстановитьТекстуруМодели", "SetModelTexture")]
+    public unsafe void SetModelTexture(IValue model, IValue texture)
+    {
+        Model m = IValueToModel(model);
+        m.Materials[0].Maps[0].Texture = IValueToTexture2D(texture);
+    }
+
+    [ContextMethod("НарисоватьМодель", "DrawModel")]
+    public void DrawModel(IValue model, IValue position, IValue scale, IValue color)
+    {
+        Raylib.DrawModel(IValueToModel(model), IValueToVector3(position), IValueToFloat(scale), IValueToColor(color));
+    }
+
+    [ContextMethod("ПолучитьОграничивающийБокс", "GetMeshBoundingBox")]
+    public IValue GetMeshBoundingBox(IValue model)
+    {
+        BoundingBox bounds = Raylib.GetModelBoundingBox(IValueToModel(model));
+        return COMWrapperContext.Create(bounds);
+    }
+
+    [ContextMethod("НарисоватьОграничивающийБокс", "DrawBoundingBox")]
+    public void DrawBoundingBox(IValue box, IValue color)
+    {
+        Raylib.DrawBoundingBox(IValueToBoundingBox(box), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьСетку", "DrawGrid")]
+    public void DrawGrid(int slices, IValue spacing)
+    {
+        Raylib.DrawGrid(slices, IValueToFloat(spacing));
+    }
+
+    [ContextMethod("ОбновитьКамеру", "UpdateCamera")]
+    public IValue UpdateCamera(IValue camera, int mode)
+    {
+        Camera3D cam = IValueToCamera3D(camera);
+        Raylib.UpdateCamera(ref cam, (CameraMode)mode);
+        return COMWrapperContext.Create(cam);
+    }
+
     [ContextMethod("КлавишаНажата", "IsKeyDown")]
     public bool IsKeyDown(int key)
     {
@@ -533,5 +586,15 @@ public class Raylibos : AutoContext<Raylibos>
     private Rectangle IValueToRectangle(IValue rect)
     {
         return (Rectangle)COMWrapperContext.MarshalIValue(rect);
+    }
+
+    private Model IValueToModel(IValue model)
+    {
+        return (Model)COMWrapperContext.MarshalIValue(model);
+    }
+
+    private BoundingBox IValueToBoundingBox(IValue box)
+    {
+        return (BoundingBox)COMWrapperContext.MarshalIValue(box);
     }
 }
