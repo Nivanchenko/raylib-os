@@ -340,6 +340,56 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.HideCursor();
     }
 
+    [ContextMethod("ЗагрузитьТекстуру", "LoadTexture")]
+    public IValue LoadTexture(string fileName)
+    {
+        Texture2D texture = Raylib.LoadTexture(fileName);
+        return COMWrapperContext.Create(texture);
+    }
+
+    [ContextMethod("НарисоватьТекстуру", "DrawTexture")]
+    public void DrawTexture(IValue texture, int posX, int posY, IValue color)
+    {
+        Raylib.DrawTexture(IValueToTexture2D(texture), posX, posY, IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьТекстуруПозиция", "DrawTextureEx")]
+    public void DrawTextureEx(IValue texture, IValue position, float rotation, float scale, IValue color)
+    {
+        Raylib.DrawTextureEx(IValueToTexture2D(texture), IValueToVector2(position), rotation, scale, IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьТекстуруПрямоугольник", "DrawTextureRec")]
+    public void DrawTextureRec(IValue texture, IValue source, IValue position, IValue color)
+    {
+        Raylib.DrawTextureRec(IValueToTexture2D(texture), IValueToRectangle(source), IValueToVector2(position), IValueToColor(color));
+    }
+
+    [ContextMethod("ВыгрузитьТекстуру", "UnloadTexture")]
+    public void UnloadTexture(IValue texture)
+    {
+        Raylib.UnloadTexture(IValueToTexture2D(texture));
+    }
+
+    [ContextMethod("ТекстураШирина", "TextureWidth")]
+    public int TextureWidth(IValue texture)
+    {
+        return IValueToTexture2D(texture).Width;
+    }
+
+    [ContextMethod("ТекстураВысота", "TextureHeight")]
+    public int TextureHeight(IValue texture)
+    {
+        return IValueToTexture2D(texture).Height;
+    }
+
+    [ContextMethod("НовыйПрямоугольник", "NewRectangle")]
+    public IValue NewRectangle(IValue x, IValue y, IValue width, IValue height)
+    {
+        Rectangle rect = new Rectangle(IValueToFloat(x), IValueToFloat(y), IValueToFloat(width), IValueToFloat(height));
+        return COMWrapperContext.Create(rect);
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
@@ -372,5 +422,15 @@ public class Raylibos : AutoContext<Raylibos>
     private Camera2D IValueToCamera2D(IValue camera)
     {
         return (Camera2D)COMWrapperContext.MarshalIValue(camera);
+    }
+
+    private Texture2D IValueToTexture2D(IValue texture)
+    {
+        return (Texture2D)COMWrapperContext.MarshalIValue(texture);
+    }
+
+    private Rectangle IValueToRectangle(IValue rect)
+    {
+        return (Rectangle)COMWrapperContext.MarshalIValue(rect);
     }
 }
