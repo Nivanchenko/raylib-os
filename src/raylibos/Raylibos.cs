@@ -365,6 +365,12 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawTextureRec(IValueToTexture2D(texture), IValueToRectangle(source), IValueToVector2(position), IValueToColor(color));
     }
 
+    [ContextMethod("НарисоватьТекстуруПро", "DrawTexturePro")]
+    public void DrawTexturePro(IValue texture, IValue source, IValue dest, IValue origin, IValue rotation, IValue color)
+    {
+        Raylib.DrawTexturePro(IValueToTexture2D(texture), IValueToRectangle(source), IValueToRectangle(dest), IValueToVector2(origin), IValueToFloat(rotation), IValueToColor(color));
+    }
+
     [ContextMethod("ВыгрузитьТекстуру", "UnloadTexture")]
     public void UnloadTexture(IValue texture)
     {
