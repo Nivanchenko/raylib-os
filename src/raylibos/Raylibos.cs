@@ -6,6 +6,30 @@ using System.Numerics;
 
 namespace raylibos;
 
+[ContextClass("Изображение", "Image")]
+public class ImageWrapper : AutoContext<ImageWrapper>
+{
+    public Image Image { get; set; }
+
+    [ScriptConstructor]
+    public static ImageWrapper Constructor()
+    {
+        return new ImageWrapper();
+    }
+
+    [ContextMethod("Ширина", "Width")]
+    public int GetWidth()
+    {
+        return Image.Width;
+    }
+
+    [ContextMethod("Высота", "Height")]
+    public int GetHeight()
+    {
+        return Image.Height;
+    }
+}
+
 [ContextClass("Рейлиб", "Raylib")]
 public class Raylibos : AutoContext<Raylibos>
 {
@@ -394,6 +418,77 @@ public class Raylibos : AutoContext<Raylibos>
     {
         Rectangle rect = new Rectangle(IValueToFloat(x), IValueToFloat(y), IValueToFloat(width), IValueToFloat(height));
         return COMWrapperContext.Create(rect);
+    }
+
+    [ContextMethod("ГенерироватьГрадиентЛинейный", "GenImageGradientLinear")]
+    public IValue GenImageGradientLinear(int width, int height, int direction, IValue top, IValue bottom)
+    {
+        Image image = Raylib.GenImageGradientLinear(width, height, direction, IValueToColor(top), IValueToColor(bottom));
+        ImageWrapper wrapper = new ImageWrapper { Image = image };
+        return wrapper;
+    }
+
+    [ContextMethod("ГенерироватьГрадиентРадиальный", "GenImageGradientRadial")]
+    public IValue GenImageGradientRadial(int width, int height, IValue spread, IValue inner, IValue outer)
+    {
+        Image image = Raylib.GenImageGradientRadial(width, height, IValueToFloat(spread), IValueToColor(inner), IValueToColor(outer));
+        ImageWrapper wrapper = new ImageWrapper { Image = image };
+        return wrapper;
+    }
+
+    [ContextMethod("ГенерироватьГрадиентКвадратный", "GenImageGradientSquare")]
+    public IValue GenImageGradientSquare(int width, int height, int direction, IValue inner, IValue outer)
+    {
+        Image image = Raylib.GenImageGradientSquare(width, height, direction, IValueToColor(inner), IValueToColor(outer));
+        ImageWrapper wrapper = new ImageWrapper { Image = image };
+        return wrapper;
+    }
+
+    [ContextMethod("ГенерироватьШахматный", "GenImageChecked")]
+    public IValue GenImageChecked(int width, int height, int checksX, int checksY, IValue col1, IValue col2)
+    {
+        Image image = Raylib.GenImageChecked(width, height, checksX, checksY, IValueToColor(col1), IValueToColor(col2));
+        ImageWrapper wrapper = new ImageWrapper { Image = image };
+        return wrapper;
+    }
+
+    [ContextMethod("ГенерироватьБелыйШум", "GenImageWhiteNoise")]
+    public IValue GenImageWhiteNoise(int width, int height, IValue factor)
+    {
+        Image image = Raylib.GenImageWhiteNoise(width, height, IValueToFloat(factor));
+        ImageWrapper wrapper = new ImageWrapper { Image = image };
+        return wrapper;
+    }
+
+    [ContextMethod("ГенерироватьШумПерлина", "GenImagePerlinNoise")]
+    public IValue GenImagePerlinNoise(int width, int height, int offsetX, int offsetY, IValue scale)
+    {
+        Image image = Raylib.GenImagePerlinNoise(width, height, offsetX, offsetY, IValueToFloat(scale));
+        ImageWrapper wrapper = new ImageWrapper { Image = image };
+        return wrapper;
+    }
+
+    [ContextMethod("ГенерироватьКлеточный", "GenImageCellular")]
+    public IValue GenImageCellular(int width, int height, int tileSize)
+    {
+        Image image = Raylib.GenImageCellular(width, height, tileSize);
+        ImageWrapper wrapper = new ImageWrapper { Image = image };
+        return wrapper;
+    }
+
+    [ContextMethod("ЗагрузитьТекстуруИзИзображения", "LoadTextureFromImage")]
+    public IValue LoadTextureFromImage(IValue image)
+    {
+        ImageWrapper imgWrapper = (ImageWrapper)COMWrapperContext.MarshalIValue(image);
+        Texture2D texture = Raylib.LoadTextureFromImage(imgWrapper.Image);
+        return COMWrapperContext.Create(texture);
+    }
+
+    [ContextMethod("ВыгрузитьИзображение", "UnloadImage")]
+    public void UnloadImage(IValue image)
+    {
+        ImageWrapper imgWrapper = (ImageWrapper)COMWrapperContext.MarshalIValue(image);
+        Raylib.UnloadImage(imgWrapper.Image);
     }
 
     // Вспомогательные функции
