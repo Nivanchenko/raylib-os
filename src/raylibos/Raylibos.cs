@@ -417,6 +417,12 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.SetTargetFPS(fps);
     }
 
+    [ContextMethod("ПоказатьFPS", "DrawFPS")]
+    public void DrawFPS(int posX = 10, int posY = 10)
+    {
+        Raylib.DrawFPS(posX, posY);
+    }
+
     [ContextMethod("СкрытьКурсор", "HideCursor")]
     public void HideCursor()
     {
