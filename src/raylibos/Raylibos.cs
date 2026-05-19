@@ -164,6 +164,12 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawRectangleGradientH(posX, posY, width, height, IValueToColor(left), IValueToColor(right));
     }
 
+    [ContextMethod("НарисоватьПрямоугольникПро", "DrawRectanglePro")]
+    public void DrawRectanglePro(IValue rec, IValue origin, IValue rotation, IValue color)
+    {
+        Raylib.DrawRectanglePro(IValueToRectangle(rec), IValueToVector2(origin), IValueToFloat(rotation), IValueToColor(color));
+    }
+
     [ContextMethod("НарисоватьТреугольник", "DrawTriangle")]
     public void DrawTriangle(IValue v1, IValue v2, IValue v3, IValue color)
     {
