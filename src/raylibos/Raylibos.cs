@@ -207,6 +207,44 @@ public class Raylibos : AutoContext<Raylibos>
         }
     }
 
+    [ContextMethod("НарисоватьТреугольникВеер", "DrawTriangleFan")]
+    public unsafe void DrawTriangleFan(IValue points, IValue color)
+    {
+        object pointsObj = COMWrapperContext.MarshalIValue(points);
+        dynamic array = pointsObj;
+        int count = (int)array.Count();
+        Vector2[] vectors = new Vector2[count];
+        
+        for (int i = 0; i < count; i++)
+        {
+            vectors[i] = IValueToVector2(array.Get(i));
+        }
+        
+        fixed (Vector2* ptr = vectors)
+        {
+            Raylib.DrawTriangleFan(ptr, count, IValueToColor(color));
+        }
+    }
+
+    [ContextMethod("НарисоватьТреугольникПолоса", "DrawTriangleStrip")]
+    public unsafe void DrawTriangleStrip(IValue points, IValue color)
+    {
+        object pointsObj = COMWrapperContext.MarshalIValue(points);
+        dynamic array = pointsObj;
+        int count = (int)array.Count();
+        Vector2[] vectors = new Vector2[count];
+        
+        for (int i = 0; i < count; i++)
+        {
+            vectors[i] = IValueToVector2(array.Get(i));
+        }
+        
+        fixed (Vector2* ptr = vectors)
+        {
+            Raylib.DrawTriangleStrip(ptr, count, IValueToColor(color));
+        }
+    }
+
     [ContextMethod("НарисоватьПолигон", "DrawPoly")]
     public void DrawPoly(IValue center, int sides, IValue radius, IValue rotation, IValue color)
     {
