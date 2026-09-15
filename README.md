@@ -251,13 +251,11 @@ src/
   raylibos/
     Raylibos.cs      # Основная обертка над raylib-cs
     raylibos.csproj  # Проект .NET 6.0
-  test.os            # Базовый тест 2D примитивов
-  testTexture.os     # Отрисовка текстур
-  testTexturePro.os  # Продвинутая отрисовка текстур (вращение, масштаб)
-  testTextureGen.os  # Генерация процедурных текстур
-  testModelTexture.os # Загрузка и отрисовка 3D моделей
+  test*.os           # 13 тестовых сценариев (см. раздел "Тестовые файлы")
 dependency/          # Библиотеки Raylib-cs.dll и нативные либы
 resources/           # Ресурсы (текстуры, 3D модели)
+examples/physics/    # Пример 2D физического движка на OneScript (см. ниже)
+basic_api.md         # Справочник по сигнатурам C API raylib — что еще не обернуто в Raylibos.cs
 ```
 
 Тестовые файлы
@@ -270,6 +268,11 @@ resources/           # Ресурсы (текстуры, 3D модели)
 - `src/testDrawLineStrip.os` — отрисовка полосы соединенных линий (массив точек)
 - `src/testDrawTriangleFan.os` — веер треугольников из центральной точки
 - `src/testDrawTriangleStrip.os` — полоса соединенных треугольников
+- `src/testDrawTriangleStripAndFan.os` — совместная демонстрация полосы и веера треугольников
+- `src/test2dcamera.os` — платформер с 2D камерой, следующей за игроком
+- `src/test3d.os` — базовая 3D сцена с камерой, кубами и сеткой
+- `src/testKeyDown.os` — перемещение круга по нажатию клавиш-стрелок
+- `src/testMouse.os` — отслеживание позиции мыши и нажатий кнопок
 
 Полезные константы
 # Клавиши (KeyboardKey)
@@ -320,7 +323,14 @@ CAMERA_ORTHOGRAPHIC = 1 // Ортографическая проекция
 - После загрузки Texture2D из Image, изображение можно выгрузить для экономии памяти
 - Для работы с unsafe кодом (установка текстур на модели) включен `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>`
 
+Пример: физический движок
+`examples/physics/` — самостоятельный 2D физический движок, написанный на чистом OneScript (векторы, AABB, импульсы, коллизии). Raylibos используется только для отрисовки (`НачатьОтрисовку`/`НарисоватьТреугольникВеер`/`ЗакончитьОтрисовку`), вся физика (гравитация, момент инерции, применение импульсов) реализована в классах `Вектор`, `ААББ`, `Физика`, `ФизическийОбъект` (папка `Классы/`) и модуле `ПомошникКолизий`.
+```bash
+oscript examples/physics/app.os
+```
+
 Ссылки
 - [Официальная документация raylib](https://www.raylib.com)
 - [raylib-cs (C# bindings)](https://github.com/raylib-cs/raylib-cs)
 - [Примеры raylib](https://github.com/raysan5/raylib/blob/master/examples/)
+- `basic_api.md` — сигнатуры C API raylib по модулям, справочник для добавления новых методов в `Raylibos.cs`
