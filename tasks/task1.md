@@ -2,7 +2,9 @@
 
 **Модуль:** rcore (Window-related functions)
 **Приоритет:** высокий — это базовые вещи, которые нужны почти в любом приложении (изменение размера окна, получение текущих размеров экрана, полноэкранный режим).
-**Статус:** реализовано только `InitWindow`, `CloseWindow`, `WindowShouldClose`. Остальное окно — нет.
+**Статус:** ✅ реализовано. Было: только `InitWindow`, `CloseWindow`, `WindowShouldClose`. Добавлено: состояние окна (`IsWindow*`, `Set/ClearWindowState`, `Toggle*`, `Maximize/Minimize/RestoreWindow`), заголовок/иконка/позиция/размеры окна, размеры экрана и параметры мониторов, буфер обмена, `Enable/DisableEventWaiting`. Тест: `src/testWindowState.os`.
+`GetClipboardImage` не реализован — отсутствует в текущей версии биндинга `Raylib-cs` 6.0.0 (в `basic_api.md` она из более новой версии raylib).
+`SetWindowIcons` реализован через `unsafe`-маршалинг массива `Image` по аналогии с `DrawLineStrip`/`DrawTriangleFan`.
 
 ## Что реализовать
 

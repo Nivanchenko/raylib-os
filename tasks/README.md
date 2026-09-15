@@ -4,11 +4,11 @@
 
 ## Итог
 
-Обёрнуто примерно **60 функций из ~500+** в `basic_api.md`. Покрыт только "happy path" 2D-рисования, часть 3D-моделей и минимальный ввод. Не тронуты: аудио (0%), текст/шрифты (кроме `DrawText`/`DrawFPS`), коллизии, работа с изображениями (кроме генераторов градиентов/шума), меши, материалы, анимации, файловая система, VR, жесты, геймпады.
+Обёрнуто примерно **100 функций из ~500+** в `basic_api.md` (после `task1.md`). Покрыт "happy path" 2D-рисования, управление окном/мониторами, часть 3D-моделей и минимальный ввод. Не тронуты: аудио (0%), текст/шрифты (кроме `DrawText`/`DrawFPS`), коллизии, работа с изображениями (кроме генераторов градиентов/шума), меши, материалы, анимации, файловая система, VR, жесты, геймпады.
 
 ## Что уже реализовано (модуль → функции)
 
-- **rcore / окно**: `InitWindow`, `WindowShouldClose`, `CloseWindow`, `BeginDrawing`, `EndDrawing`, `ClearBackground`, `SetTargetFPS`, `DrawFPS`
+- **rcore / окно**: `InitWindow`, `WindowShouldClose`, `CloseWindow`, `BeginDrawing`, `EndDrawing`, `ClearBackground`, `SetTargetFPS`, `DrawFPS`, плюс полный набор состояния/размеров/мониторов/буфера обмена окна из `task1.md` (`IsWindow*`, `Set/ClearWindowState`, `Toggle*`, `Maximize/Minimize/RestoreWindow`, `SetWindowTitle/Icon(s)/Position/Monitor/Min/Max/Size/Opacity/Focused`, `Get*Screen/Render/Monitor*`, `GetWindowPosition/ScaleDPI`, `Get/SetClipboardText`, `Enable/DisableEventWaiting`)
 - **rcore / курсор**: `ShowCursor`, `HideCursor`, `IsCursorHidden`
 - **rcore / ввод**: `IsKeyDown`, `IsMouseButtonPressed`, `GetMousePosition`, `GetMouseWheelMove`
 - **rcore / камера**: `BeginMode2D`/`EndMode2D`, `BeginMode3D`/`EndMode3D`, `UpdateCamera` (3D), собственные конструкторы `NewCamera2D`/`NewCamera3D` + геттеры полей Camera2D
@@ -25,7 +25,7 @@
 
 | Файл | Модуль | Приоритет | Что внутри |
 |---|---|---|---|
-| [task1.md](task1.md) | rcore: окно и мониторы | Высокий | состояние окна, размеры, позиция, буфер обмена |
+| [task1.md](task1.md) | rcore: окно и мониторы | Высокий | ✅ реализовано — состояние окна, размеры, позиция, буфер обмена |
 | [task2.md](task2.md) | rcore: курсор, тайминг, misc | Средний | таймеры, скриншот, флаги конфигурации, seed |
 | [task3.md](task3.md) | rcore: ввод (клавиатура/мышь/геймпад/тач/жесты) | Высокий | недостающие проверки клавиш/мыши, геймпады, тач, жесты |
 | [task4.md](task4.md) | rcore: экранные координаты, режимы рендера, шейдеры | Средний | Screen↔World, RenderTexture, ShaderMode, BlendMode, ScissorMode, Shader API |

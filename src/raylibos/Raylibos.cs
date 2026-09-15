@@ -98,6 +98,294 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.CloseWindow();
     }
 
+    // Состояние окна
+
+    [ContextMethod("ОкноГотово", "IsWindowReady")]
+    public bool IsWindowReady()
+    {
+        return Raylib.IsWindowReady();
+    }
+
+    [ContextMethod("ОкноПолноэкранное", "IsWindowFullscreen")]
+    public bool IsWindowFullscreen()
+    {
+        return Raylib.IsWindowFullscreen();
+    }
+
+    [ContextMethod("ОкноСкрыто", "IsWindowHidden")]
+    public bool IsWindowHidden()
+    {
+        return Raylib.IsWindowHidden();
+    }
+
+    [ContextMethod("ОкноСвёрнуто", "IsWindowMinimized")]
+    public bool IsWindowMinimized()
+    {
+        return Raylib.IsWindowMinimized();
+    }
+
+    [ContextMethod("ОкноРазвёрнуто", "IsWindowMaximized")]
+    public bool IsWindowMaximized()
+    {
+        return Raylib.IsWindowMaximized();
+    }
+
+    [ContextMethod("ОкноВФокусе", "IsWindowFocused")]
+    public bool IsWindowFocused()
+    {
+        return Raylib.IsWindowFocused();
+    }
+
+    [ContextMethod("ОкноИзменилоРазмер", "IsWindowResized")]
+    public bool IsWindowResized()
+    {
+        return Raylib.IsWindowResized();
+    }
+
+    [ContextMethod("ОкноИмеетФлаг", "IsWindowState")]
+    public bool IsWindowState(int flag)
+    {
+        return Raylib.IsWindowState((ConfigFlags)flag);
+    }
+
+    [ContextMethod("УстановитьФлагиОкна", "SetWindowState")]
+    public void SetWindowState(int flags)
+    {
+        Raylib.SetWindowState((ConfigFlags)flags);
+    }
+
+    [ContextMethod("ОчиститьФлагиОкна", "ClearWindowState")]
+    public void ClearWindowState(int flags)
+    {
+        Raylib.ClearWindowState((ConfigFlags)flags);
+    }
+
+    [ContextMethod("ПереключитьПолноэкранныйРежим", "ToggleFullscreen")]
+    public void ToggleFullscreen()
+    {
+        Raylib.ToggleFullscreen();
+    }
+
+    [ContextMethod("ПереключитьРежимБезРамки", "ToggleBorderlessWindowed")]
+    public void ToggleBorderlessWindowed()
+    {
+        Raylib.ToggleBorderlessWindowed();
+    }
+
+    [ContextMethod("РазвернутьОкно", "MaximizeWindow")]
+    public void MaximizeWindow()
+    {
+        Raylib.MaximizeWindow();
+    }
+
+    [ContextMethod("СвернутьОкно", "MinimizeWindow")]
+    public void MinimizeWindow()
+    {
+        Raylib.MinimizeWindow();
+    }
+
+    [ContextMethod("ВосстановитьОкно", "RestoreWindow")]
+    public void RestoreWindow()
+    {
+        Raylib.RestoreWindow();
+    }
+
+    [ContextMethod("УстановитьФокусОкна", "SetWindowFocused")]
+    public void SetWindowFocused()
+    {
+        Raylib.SetWindowFocused();
+    }
+
+    // Заголовок, иконка, позиция и размеры окна
+
+    [ContextMethod("УстановитьЗаголовокОкна", "SetWindowTitle")]
+    public void SetWindowTitle(string title)
+    {
+        Raylib.SetWindowTitle(title);
+    }
+
+    [ContextMethod("УстановитьИконкуОкна", "SetWindowIcon")]
+    public void SetWindowIcon(IValue image)
+    {
+        Raylib.SetWindowIcon(IValueToImage(image));
+    }
+
+    [ContextMethod("УстановитьИконкиОкна", "SetWindowIcons")]
+    public unsafe void SetWindowIcons(IValue images)
+    {
+        object imagesObj = COMWrapperContext.MarshalIValue(images);
+        dynamic array = imagesObj;
+        int count = (int)array.Count();
+        Image[] icons = new Image[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            icons[i] = IValueToImage(array.Get(i));
+        }
+
+        fixed (Image* ptr = icons)
+        {
+            Raylib.SetWindowIcons(ptr, count);
+        }
+    }
+
+    [ContextMethod("УстановитьПозициюОкна", "SetWindowPosition")]
+    public void SetWindowPosition(int x, int y)
+    {
+        Raylib.SetWindowPosition(x, y);
+    }
+
+    [ContextMethod("УстановитьМониторОкна", "SetWindowMonitor")]
+    public void SetWindowMonitor(int monitor)
+    {
+        Raylib.SetWindowMonitor(monitor);
+    }
+
+    [ContextMethod("УстановитьМинимальныйРазмерОкна", "SetWindowMinSize")]
+    public void SetWindowMinSize(int width, int height)
+    {
+        Raylib.SetWindowMinSize(width, height);
+    }
+
+    [ContextMethod("УстановитьМаксимальныйРазмерОкна", "SetWindowMaxSize")]
+    public void SetWindowMaxSize(int width, int height)
+    {
+        Raylib.SetWindowMaxSize(width, height);
+    }
+
+    [ContextMethod("УстановитьРазмерОкна", "SetWindowSize")]
+    public void SetWindowSize(int width, int height)
+    {
+        Raylib.SetWindowSize(width, height);
+    }
+
+    [ContextMethod("УстановитьПрозрачностьОкна", "SetWindowOpacity")]
+    public void SetWindowOpacity(IValue opacity)
+    {
+        Raylib.SetWindowOpacity(IValueToFloat(opacity));
+    }
+
+    // Размеры экрана и мониторы
+
+    [ContextMethod("ШиринаЭкрана", "GetScreenWidth")]
+    public int GetScreenWidth()
+    {
+        return Raylib.GetScreenWidth();
+    }
+
+    [ContextMethod("ВысотаЭкрана", "GetScreenHeight")]
+    public int GetScreenHeight()
+    {
+        return Raylib.GetScreenHeight();
+    }
+
+    [ContextMethod("ШиринаРендера", "GetRenderWidth")]
+    public int GetRenderWidth()
+    {
+        return Raylib.GetRenderWidth();
+    }
+
+    [ContextMethod("ВысотаРендера", "GetRenderHeight")]
+    public int GetRenderHeight()
+    {
+        return Raylib.GetRenderHeight();
+    }
+
+    [ContextMethod("КоличествоМониторов", "GetMonitorCount")]
+    public int GetMonitorCount()
+    {
+        return Raylib.GetMonitorCount();
+    }
+
+    [ContextMethod("ТекущийМонитор", "GetCurrentMonitor")]
+    public int GetCurrentMonitor()
+    {
+        return Raylib.GetCurrentMonitor();
+    }
+
+    [ContextMethod("ПозицияМонитора", "GetMonitorPosition")]
+    public IValue GetMonitorPosition(int monitor)
+    {
+        Vector2 position = Raylib.GetMonitorPosition(monitor);
+        return COMWrapperContext.Create(position);
+    }
+
+    [ContextMethod("ШиринаМонитора", "GetMonitorWidth")]
+    public int GetMonitorWidth(int monitor)
+    {
+        return Raylib.GetMonitorWidth(monitor);
+    }
+
+    [ContextMethod("ВысотаМонитора", "GetMonitorHeight")]
+    public int GetMonitorHeight(int monitor)
+    {
+        return Raylib.GetMonitorHeight(monitor);
+    }
+
+    [ContextMethod("ФизическаяШиринаМонитора", "GetMonitorPhysicalWidth")]
+    public int GetMonitorPhysicalWidth(int monitor)
+    {
+        return Raylib.GetMonitorPhysicalWidth(monitor);
+    }
+
+    [ContextMethod("ФизическаяВысотаМонитора", "GetMonitorPhysicalHeight")]
+    public int GetMonitorPhysicalHeight(int monitor)
+    {
+        return Raylib.GetMonitorPhysicalHeight(monitor);
+    }
+
+    [ContextMethod("ЧастотаОбновленияМонитора", "GetMonitorRefreshRate")]
+    public int GetMonitorRefreshRate(int monitor)
+    {
+        return Raylib.GetMonitorRefreshRate(monitor);
+    }
+
+    [ContextMethod("ПозицияОкна", "GetWindowPosition")]
+    public IValue GetWindowPosition()
+    {
+        Vector2 position = Raylib.GetWindowPosition();
+        return COMWrapperContext.Create(position);
+    }
+
+    [ContextMethod("МасштабDPIОкна", "GetWindowScaleDPI")]
+    public IValue GetWindowScaleDPI()
+    {
+        Vector2 scale = Raylib.GetWindowScaleDPI();
+        return COMWrapperContext.Create(scale);
+    }
+
+    [ContextMethod("ИмяМонитора", "GetMonitorName")]
+    public string GetMonitorName(int monitor)
+    {
+        return Raylib.GetMonitorName_(monitor);
+    }
+
+    // Буфер обмена и обработка событий
+
+    [ContextMethod("УстановитьТекстБуфераОбмена", "SetClipboardText")]
+    public void SetClipboardText(string text)
+    {
+        Raylib.SetClipboardText(text);
+    }
+
+    [ContextMethod("ТекстБуфераОбмена", "GetClipboardText")]
+    public string GetClipboardText()
+    {
+        return Raylib.GetClipboardText_();
+    }
+
+    [ContextMethod("ВключитьОжиданиеСобытий", "EnableEventWaiting")]
+    public void EnableEventWaiting()
+    {
+        Raylib.EnableEventWaiting();
+    }
+
+    [ContextMethod("ОтключитьОжиданиеСобытий", "DisableEventWaiting")]
+    public void DisableEventWaiting()
+    {
+        Raylib.DisableEventWaiting();
+    }
+
     [ContextMethod("ОчиститьФон", "ClearBackground")]
     public void ClearBackground(IValue color)
     {
@@ -665,5 +953,11 @@ public class Raylibos : AutoContext<Raylibos>
     private BoundingBox IValueToBoundingBox(IValue box)
     {
         return (BoundingBox)COMWrapperContext.MarshalIValue(box);
+    }
+
+    private Image IValueToImage(IValue image)
+    {
+        ImageWrapper imgWrapper = (ImageWrapper)COMWrapperContext.MarshalIValue(image);
+        return imgWrapper.Image;
     }
 }
