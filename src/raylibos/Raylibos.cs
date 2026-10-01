@@ -3,6 +3,7 @@ using ScriptEngine.Machine.Contexts;
 using ScriptEngine.Machine;
 using Raylib_cs;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace raylibos;
 
@@ -33,6 +34,19 @@ public class ImageWrapper : AutoContext<ImageWrapper>
 [ContextClass("Рейлиб", "Raylib")]
 public class Raylibos : AutoContext<Raylibos>
 {
+    // raylib-cs 6.0.0 calls raylib 5.0 entry points; bundled native libraries use 5.5 names.
+    [DllImport("raylib", EntryPoint = "GetScreenToWorldRay", CallingConvention = CallingConvention.Cdecl)]
+    private static extern Ray GetScreenToWorldRayNative(Vector2 position, Camera3D camera);
+
+    [DllImport("raylib", EntryPoint = "IsShaderValid", CallingConvention = CallingConvention.Cdecl)]
+    private static extern byte IsShaderValidNative(Shader shader);
+
+    [DllImport("raylib", EntryPoint = "IsRenderTextureValid", CallingConvention = CallingConvention.Cdecl)]
+    private static extern byte IsRenderTextureValidNative(RenderTexture2D target);
+
+    private static bool _useNewRayName;
+    private static bool _useNewShaderName;
+    private static bool _useNewRenderTextureName;
 
     [ScriptConstructor]
     public static Raylibos Constructor()
@@ -582,6 +596,252 @@ public class Raylibos : AutoContext<Raylibos>
     public void EndMode3D()
     {
         Raylib.EndMode3D();
+    }
+
+    [ContextMethod("МирНаЭкран2D", "GetWorldToScreen2D")]
+    public IValue GetWorldToScreen2D(IValue position, IValue camera)
+    {
+        return COMWrapperContext.Create(Raylib.GetWorldToScreen2D(IValueToVector2(position), IValueToCamera2D(camera)));
+    }
+
+    [ContextMethod("ЭкранВМир2D", "GetScreenToWorld2D")]
+    public IValue GetScreenToWorld2D(IValue position, IValue camera)
+    {
+        return COMWrapperContext.Create(Raylib.GetScreenToWorld2D(IValueToVector2(position), IValueToCamera2D(camera)));
+    }
+
+    [ContextMethod("МирНаЭкран3D", "GetWorldToScreen")]
+    public IValue GetWorldToScreen(IValue position, IValue camera)
+    {
+        return COMWrapperContext.Create(Raylib.GetWorldToScreen(IValueToVector3(position), IValueToCamera3D(camera)));
+    }
+
+    [ContextMethod("МирНаЭкран3DEx", "GetWorldToScreenEx")]
+    public IValue GetWorldToScreenEx(IValue position, IValue camera, int width, int height)
+    {
+        return COMWrapperContext.Create(Raylib.GetWorldToScreenEx(IValueToVector3(position), IValueToCamera3D(camera), width, height));
+    }
+
+    [ContextMethod("ЛучИзЭкрана", "GetMouseRay")]
+    public IValue GetMouseRay(IValue position, IValue camera)
+    {
+        Vector2 pos = IValueToVector2(position);
+        Camera3D cam = IValueToCamera3D(camera);
+        if (_useNewRayName)
+            return COMWrapperContext.Create(GetScreenToWorldRayNative(pos, cam));
+
+        try
+        {
+            return COMWrapperContext.Create(Raylib.GetMouseRay(pos, cam));
+        }
+        catch (EntryPointNotFoundException)
+        {
+            _useNewRayName = true;
+            return COMWrapperContext.Create(GetScreenToWorldRayNative(pos, cam));
+        }
+    }
+
+    [ContextMethod("ЛучПозиция", "RayPosition")]
+    public IValue RayPosition(IValue ray)
+    {
+        return COMWrapperContext.Create(((Ray)COMWrapperContext.MarshalIValue(ray)).Position);
+    }
+
+    [ContextMethod("ЛучНаправление", "RayDirection")]
+    public IValue RayDirection(IValue ray)
+    {
+        return COMWrapperContext.Create(((Ray)COMWrapperContext.MarshalIValue(ray)).Direction);
+    }
+
+    [ContextMethod("МатрицаКамеры3D", "GetCameraMatrix")]
+    public IValue GetCameraMatrix(IValue camera)
+    {
+        return COMWrapperContext.Create(Raylib.GetCameraMatrix(IValueToCamera3D(camera)));
+    }
+
+    [ContextMethod("МатрицаКамеры2D", "GetCameraMatrix2D")]
+    public IValue GetCameraMatrix2D(IValue camera)
+    {
+        return COMWrapperContext.Create(Raylib.GetCameraMatrix2D(IValueToCamera2D(camera)));
+    }
+
+    [ContextMethod("ЗагрузитьТекстуруРендера", "LoadRenderTexture")]
+    public IValue LoadRenderTexture(int width, int height)
+    {
+        return COMWrapperContext.Create(Raylib.LoadRenderTexture(width, height));
+    }
+
+    [ContextMethod("ТекстураРендераГотова", "IsRenderTextureReady")]
+    public bool IsRenderTextureReady(IValue target)
+    {
+        RenderTexture2D texture = IValueToRenderTexture2D(target);
+        if (_useNewRenderTextureName)
+            return IsRenderTextureValidNative(texture) != 0;
+
+        try
+        {
+            return Raylib.IsRenderTextureReady(texture);
+        }
+        catch (EntryPointNotFoundException)
+        {
+            _useNewRenderTextureName = true;
+            return IsRenderTextureValidNative(texture) != 0;
+        }
+    }
+
+    [ContextMethod("ЦветоваяТекстураРендера", "RenderTextureColor")]
+    public IValue RenderTextureColor(IValue target)
+    {
+        return COMWrapperContext.Create(IValueToRenderTexture2D(target).Texture);
+    }
+
+    [ContextMethod("ВыгрузитьТекстуруРендера", "UnloadRenderTexture")]
+    public void UnloadRenderTexture(IValue target)
+    {
+        Raylib.UnloadRenderTexture(IValueToRenderTexture2D(target));
+    }
+
+    [ContextMethod("НачатьРисованиеВТекстуру", "BeginTextureMode")]
+    public void BeginTextureMode(IValue target)
+    {
+        Raylib.BeginTextureMode(IValueToRenderTexture2D(target));
+    }
+
+    [ContextMethod("ЗакончитьРисованиеВТекстуру", "EndTextureMode")]
+    public void EndTextureMode()
+    {
+        Raylib.EndTextureMode();
+    }
+
+    [ContextMethod("НачатьРежимСмешивания", "BeginBlendMode")]
+    public void BeginBlendMode(int mode)
+    {
+        Raylib.BeginBlendMode((BlendMode)mode);
+    }
+
+    [ContextMethod("ЗакончитьРежимСмешивания", "EndBlendMode")]
+    public void EndBlendMode()
+    {
+        Raylib.EndBlendMode();
+    }
+
+    [ContextMethod("НачатьОбрезку", "BeginScissorMode")]
+    public void BeginScissorMode(int x, int y, int width, int height)
+    {
+        Raylib.BeginScissorMode(x, y, width, height);
+    }
+
+    [ContextMethod("ЗакончитьОбрезку", "EndScissorMode")]
+    public void EndScissorMode()
+    {
+        Raylib.EndScissorMode();
+    }
+
+    [ContextMethod("ЗагрузитьШейдер", "LoadShader")]
+    public IValue LoadShader(string vertexFileName, string fragmentFileName)
+    {
+        return COMWrapperContext.Create(Raylib.LoadShader(vertexFileName, fragmentFileName));
+    }
+
+    [ContextMethod("ЗагрузитьШейдерИзСтроки", "LoadShaderFromMemory")]
+    public IValue LoadShaderFromMemory(string vertexCode, string fragmentCode)
+    {
+        return COMWrapperContext.Create(Raylib.LoadShaderFromMemory(vertexCode, fragmentCode));
+    }
+
+    [ContextMethod("ШейдерГотов", "IsShaderReady")]
+    public bool IsShaderReady(IValue shader)
+    {
+        Shader value = IValueToShader(shader);
+        if (_useNewShaderName)
+            return IsShaderValidNative(value) != 0;
+
+        try
+        {
+            return Raylib.IsShaderReady(value);
+        }
+        catch (EntryPointNotFoundException)
+        {
+            _useNewShaderName = true;
+            return IsShaderValidNative(value) != 0;
+        }
+    }
+
+    [ContextMethod("ПозицияПараметраШейдера", "GetShaderLocation")]
+    public int GetShaderLocation(IValue shader, string name)
+    {
+        return Raylib.GetShaderLocation(IValueToShader(shader), name);
+    }
+
+    [ContextMethod("ПозицияАтрибутаШейдера", "GetShaderLocationAttrib")]
+    public int GetShaderLocationAttrib(IValue shader, string name)
+    {
+        return Raylib.GetShaderLocationAttrib(IValueToShader(shader), name);
+    }
+
+    [ContextMethod("УстановитьЗначениеШейдераFloat", "SetShaderValueFloat")]
+    public void SetShaderValueFloat(IValue shader, int location, IValue value)
+    {
+        Raylib.SetShaderValue(IValueToShader(shader), location, IValueToFloat(value), ShaderUniformDataType.Float);
+    }
+
+    [ContextMethod("УстановитьЗначениеШейдераInt", "SetShaderValueInt")]
+    public void SetShaderValueInt(IValue shader, int location, int value)
+    {
+        Raylib.SetShaderValue(IValueToShader(shader), location, value, ShaderUniformDataType.Int);
+    }
+
+    [ContextMethod("УстановитьЗначениеШейдераVector2", "SetShaderValueVector2")]
+    public void SetShaderValueVector2(IValue shader, int location, IValue value)
+    {
+        Raylib.SetShaderValue(IValueToShader(shader), location, IValueToVector2(value), ShaderUniformDataType.Vec2);
+    }
+
+    [ContextMethod("УстановитьЗначениеШейдераVector3", "SetShaderValueVector3")]
+    public void SetShaderValueVector3(IValue shader, int location, IValue value)
+    {
+        Raylib.SetShaderValue(IValueToShader(shader), location, IValueToVector3(value), ShaderUniformDataType.Vec3);
+    }
+
+    [ContextMethod("УстановитьМассивШейдераFloat", "SetShaderValueVFloat")]
+    public void SetShaderValueVFloat(IValue shader, int location, IValue values)
+    {
+        dynamic array = COMWrapperContext.MarshalIValue(values);
+        int count = (int)array.Count();
+        float[] items = new float[count];
+        for (int i = 0; i < count; i++)
+            items[i] = IValueToFloat(array.Get(i));
+        Raylib.SetShaderValueV(IValueToShader(shader), location, items, ShaderUniformDataType.Float, count);
+    }
+
+    [ContextMethod("УстановитьМатрицуШейдера", "SetShaderValueMatrix")]
+    public void SetShaderValueMatrix(IValue shader, int location, IValue matrix)
+    {
+        Raylib.SetShaderValueMatrix(IValueToShader(shader), location, (Matrix4x4)COMWrapperContext.MarshalIValue(matrix));
+    }
+
+    [ContextMethod("УстановитьТекстуруШейдера", "SetShaderValueTexture")]
+    public void SetShaderValueTexture(IValue shader, int location, IValue texture)
+    {
+        Raylib.SetShaderValueTexture(IValueToShader(shader), location, IValueToTexture2D(texture));
+    }
+
+    [ContextMethod("НачатьРежимШейдера", "BeginShaderMode")]
+    public void BeginShaderMode(IValue shader)
+    {
+        Raylib.BeginShaderMode(IValueToShader(shader));
+    }
+
+    [ContextMethod("ЗакончитьРежимШейдера", "EndShaderMode")]
+    public void EndShaderMode()
+    {
+        Raylib.EndShaderMode();
+    }
+
+    [ContextMethod("ВыгрузитьШейдер", "UnloadShader")]
+    public void UnloadShader(IValue shader)
+    {
+        Raylib.UnloadShader(IValueToShader(shader));
     }
 
     [ContextMethod("НарисоватьКуб", "DrawCube")]
@@ -1254,6 +1514,16 @@ public class Raylibos : AutoContext<Raylibos>
     private Texture2D IValueToTexture2D(IValue texture)
     {
         return (Texture2D)COMWrapperContext.MarshalIValue(texture);
+    }
+
+    private RenderTexture2D IValueToRenderTexture2D(IValue target)
+    {
+        return (RenderTexture2D)COMWrapperContext.MarshalIValue(target);
+    }
+
+    private Shader IValueToShader(IValue shader)
+    {
+        return (Shader)COMWrapperContext.MarshalIValue(shader);
     }
 
     private Rectangle IValueToRectangle(IValue rect)

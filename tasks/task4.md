@@ -2,7 +2,7 @@
 
 **Модуль:** rcore (Screen-space / Drawing modes / Shader management)
 **Приоритет:** средний — нужно для продвинутых сценариев (кастомный рендер в текстуру, шейдеры, перевод координат экран↔мир для 3D и 2D-камеры).
-**Статус:** реализовано только `BeginMode2D`/`EndMode2D`, `BeginMode3D`/`EndMode3D`. Всё остальное — нет.
+**Статус:** реализованы преобразования координат 2D/3D, экранный луч, матрицы камеры, render texture, режимы blend/scissor/texture/shader и основные операции с шейдерами. `GetScreenToWorldRayEx` отсутствует в используемой версии raylib-cs 6.0.0.
 
 ## Что реализовать
 
@@ -45,11 +45,13 @@ void UnloadShader(Shader shader);
 ```
 
 ## Заметки по реализации
-- **Первый шаг:** `GetScreenToWorld2D`/`GetWorldToScreen2D` с существующими `Camera2D` и `Vector2`; показать перевод координат мыши в `src/test2dcamera.os`. Не нужны новые ресурсы или типы.
-- `RenderTexture2D` — новый marshalable-тип, потребуется `IValueToRenderTexture2D` и обёртки `LoadRenderTexture`/`UnloadRenderTexture` из `task7.md`. Реализовывать с `BeginTextureMode`/`EndTextureMode` одним отдельным шагом.
-- `SetShaderValue`/`SetShaderValueV` принимают `const void *value` — на стороне OneScript придётся ограничиться конкретными перегрузками под типы (float, int, Vector2/3/4, Color) вместо универсального `void*`. Реализовать хотя бы `УстановитьЗначениеШейдераFloat`/`...Int`/`...Vector2` — не пытаться сделать единый метод под все `ShaderUniformDataType`.
+- `GetScreenToWorld2D`/`GetWorldToScreen2D` используют существующие `Camera2D` и `Vector2`; проверка координат есть в `src/testCameraCoords.os`.
+- `RenderTexture2D` передаётся через `IValueToRenderTexture2D`; `LoadRenderTexture`/`UnloadRenderTexture` и `BeginTextureMode`/`EndTextureMode` реализованы совместно (см. также `task7.md`).
+- `SetShaderValue`/`SetShaderValueV` принимают `const void *value` в C API; из OneScript доступны типизированные методы для float, int, Vector2, Vector3, массива float, матрицы и текстуры вместо универсального `void*`.
 - Для 3D-камеры есть `IValueToCamera3D`; сигнатуры `GetScreenToWorldRay` и других функций проверить по пакету, не выводить тип аргумента из C-имени `Camera`.
+- Для экранного луча биндинг использует имя `GetMouseRay`, для проверок готовности — `IsShaderReady`/`IsRenderTextureReady`. Поставляемая нативная raylib 5.5 экспортирует новые имена (`GetScreenToWorldRay`, `IsShaderValid`, `IsRenderTextureValid`); обёртка при отсутствии старого символа вызывает новый. Все методы имеют русское имя и английский alias.
 
 ## Тестовый скрипт
 `src/testShaderMode.os` — загрузка и применение шейдера; файла шейдера в `resources/` пока нет, потребуется добавить подходящий пример или использовать `LoadShaderFromMemory`.
 `src/testRenderTexture.os` — рендер сцены в `RenderTexture2D` через `BeginTextureMode`, затем отрисовка результата как обычной текстуры.
+`src/testCameraCoords.os` — преобразования координат и луч через 3D-камеру.

@@ -2,7 +2,7 @@
 
 **Модуль:** rtextures (Texture loading/configuration/drawing) + Color/pixel functions
 **Приоритет:** средний.
-**Статус:** реализованы базовые `LoadTexture`/`UnloadTexture`/`DrawTexture(Ex/Rec/Pro)`. Ни одна `Color*`-утилита, `RenderTexture2D`, фильтры и `NPatch` не реализованы.
+**Статус:** реализованы базовые `LoadTexture`/`UnloadTexture`/`DrawTexture(Ex/Rec/Pro)` и `RenderTexture2D` (см. `task4.md`). `Color*`-утилиты, фильтры и `NPatch` ещё не реализованы.
 
 ## Что реализовать
 
@@ -44,7 +44,7 @@ Color GetColor(unsigned int hexValue);
 
 ## Заметки по реализации
 - **Первый шаг:** `Fade` и `ColorAlpha` с уже существующим типом `Color`; утилиты `Vector3`/`Vector4` и рендер в текстуру — отдельные изменения.
-- `RenderTexture2D` требует нового `IValueToRenderTexture2D` хелпера — координировать с `task4.md` (`BeginTextureMode`/`EndTextureMode` используют этот же тип), реализовывать вместе. Потребуется отдельный способ получить цветовую текстуру результата и выгрузить render texture ровно один раз.
+- `RenderTexture2D` уже передаётся через `IValueToRenderTexture2D`; цветовая текстура доступна через `ЦветоваяТекстураРендера`, выгружать её отдельно не нужно — вызовите `ВыгрузитьТекстуруРендера` ровно один раз (см. `task4.md`).
 - `NPatchInfo` — новый marshalable-тип (`NPatchLayout` enum + `Rectangle` source), пригодится для UI (масштабируемые рамки/кнопки без искажений) — но можно отложить, если UI не в приоритете проекта.
 - `SetTextureFilter`/`SetTextureWrap` принимают enum (`TextureFilter`, `TextureWrap` в raylib-cs) — принимать как `int` и приводить типом, как уже сделано для `CameraMode`/`CameraProjection`.
 
