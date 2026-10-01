@@ -2,7 +2,7 @@
 
 **Модуль:** rmodels (Mesh management / Mesh generation / Materials / Animations / Collision detection)
 **Приоритет:** низкий — продвинутые сценарии (процедурная генерация геометрии, скелетная анимация), нужны только если проект пойдёт в сторону полноценных 3D-игр, а не только 2D + простые 3D-сцены.
-**Статус:** не реализовано ничего из этого раздела.
+**Статус:** методы из перечисленных ниже разделов пока не реализованы; `LoadModel` и пользовательский `SetModelTexture` уже есть в `Raylibos.cs`.
 
 ## Что реализовать
 
@@ -21,7 +21,7 @@ Mesh GenMeshHeightmap(Image heightmap, Vector3 size);
 ### Меши и модель из меша
 ```c
 Model LoadModelFromMesh(Mesh mesh);
-bool IsModelValid(Model model);
+bool IsModelReady(Model model); // имя метода raylib-cs 6.0.0
 void UnloadMesh(Mesh mesh);
 void DrawMesh(Mesh mesh, Material material, Matrix transform);
 BoundingBox GetMeshBoundingBox(Mesh mesh);
@@ -30,7 +30,7 @@ BoundingBox GetMeshBoundingBox(Mesh mesh);
 ### Материалы
 ```c
 Material LoadMaterialDefault(void);
-bool IsMaterialValid(Material material);
+bool IsMaterialReady(Material material); // имя метода raylib-cs 6.0.0
 void UnloadMaterial(Material material);
 void SetMaterialTexture(Material *material, int mapType, Texture2D texture);
 void SetModelMeshMaterial(Model *model, int meshId, int materialId);
@@ -56,8 +56,9 @@ RayCollision GetRayCollisionTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3
 ```
 
 ## Заметки по реализации
-- `LoadModelAnimations` возвращает массив (`ModelAnimation *` + count через out-параметр) — на стороне OneScript вернуть `Массив` из враппер-объектов, аналогично тому, как `Физика.Объекты` — массив объектов в `examples/physics`.
-- 3D-коллизии переиспользуют `Ray`/`RayCollision` типы из `task9.md` — делать после него.
+- **Первый шаг:** `CheckCollisionSpheres`/`CheckCollisionBoxes`, используя существующие `Vector3`/`BoundingBox` (можно переиспользовать `GetModelBoundingBox`); проверка результата на пересекающихся и непересекающихся объектах.
+- `LoadModelAnimations` возвращает массив с отдельными правилами владения памятью; перед обёрткой определить, как освободить все анимации ровно один раз. Не превращать указатель в `Массив` OneScript до проверки контракта raylib-cs.
+- Raycast-коллизии используют `Ray` из шага по `task9.md` и возвращают новый тип `RayCollision`; делать отдельно от простых проверок. При `LoadModelFromMesh` отдельно проверить владение мешем после создания модели во избежание двойной выгрузки.
 - Это самая нишевая и трудоёмкая часть API (полноценная поддержка skeletal animation) — приступать в последнюю очередь, только по явному запросу.
 
 ## Тестовый скрипт

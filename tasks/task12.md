@@ -1,7 +1,7 @@
 # Task 12 — rcore: файловая система, сжатие/кодирование, automation events
 
 **Модуль:** rcore (File system management / Compression-Encoding / Automation events / Logging / Memory management)
-**Приоритет:** низкий — не специфично для графики, OneScript уже имеет собственные средства работы с файлами (`ФайлSystem`, `НачатьТранзакцию` и т.д.); обёртывать стоит только то, чего не хватает в стандартной библиотеке OneScript или что специфично для raylib-сценариев (скриншоты, drag&drop файлов в окно).
+**Приоритет:** низкий — OneScript уже имеет средства работы с файлами; обёртывать стоит только то, чего не хватает или что специфично для raylib-сценариев (например, drag&drop файлов в окно; скриншоты — в `task2.md`).
 
 ## Что реализовать (если понадобится)
 
@@ -36,10 +36,11 @@ void TraceLog(int logLevel, const char *text);
 ```c
 char *EncodeDataBase64(const unsigned char *data, int dataSize, int *outputSize);
 unsigned char *DecodeDataBase64(const char *text, int *outputSize);
-unsigned int ComputeCRC32(unsigned char *data, int dataSize);
+// ComputeCRC32 из более нового C API отсутствует в raylib-cs 6.0.0
 ```
 
 ### Automation events (очень низкий приоритет — запись/воспроизведение input-событий для авто-тестов/демо-записей)
+Следующие методы есть в `basic_api.md`, но отсутствуют в установленном raylib-cs 6.0.0; не планировать обёртку без обновления зависимости:
 ```c
 AutomationEventList LoadAutomationEventList(const char *fileName);
 void UnloadAutomationEventList(AutomationEventList list);
@@ -50,8 +51,8 @@ void PlayAutomationEvent(AutomationEvent event);
 ```
 
 ## Заметки по реализации
-- Начинать только с `IsFileDropped`/`LoadDroppedFiles`/`UnloadDroppedFiles` — это единственная часть, которая реально расширяет возможности графического приложения (остальное either дублирует OneScript, either слишком нишевое: сжатие, хэши, automation events).
-- `FilePathList` — новый marshalable-тип (счётчик + массив строк) — вернуть как обычный OneScript `Массив` строк, без необходимости отдельного враппера.
+- **Первый шаг:** `IsFileDropped` и метод, который вызывает `LoadDroppedFiles`, копирует имена в `Массив` строк OneScript и гарантированно вызывает `UnloadDroppedFiles`. Проверить порядок и форму результата по raylib-cs 6.0.0.
+- `FilePathList` содержит нативный ресурс; нельзя вернуть его напрямую или забыть вызвать `UnloadDroppedFiles` после копирования строк.
 - Оставшиеся пункты (File system общего назначения, TraceLog, сжатие, automation events) реализовывать только по явному запросу — не делать "на всякий случай".
 
 ## Тестовый скрипт

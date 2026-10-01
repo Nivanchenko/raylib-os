@@ -13,7 +13,7 @@ void DrawPixelV(Vector2 position, Color color);
 void DrawLineV(Vector2 startPos, Vector2 endPos, Color color);
 void DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color);
 void DrawLineBezier(Vector2 startPos, Vector2 endPos, float thick, Color color);
-void DrawLineDashed(Vector2 startPos, Vector2 endPos, int dashSize, int spaceSize, Color color);
+// DrawLineDashed из более нового C API отсутствует в raylib-cs 6.0.0 — не включать без обновления пакета
 ```
 
 ### Круги, эллипсы, кольца
@@ -22,8 +22,7 @@ void DrawCircleV(Vector2 center, float radius, Color color);
 void DrawCircleSector(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color);
 void DrawCircleSectorLines(Vector2 center, float radius, float startAngle, float endAngle, int segments, Color color);
 void DrawCircleLinesV(Vector2 center, float radius, Color color);
-void DrawEllipseV(Vector2 center, float radiusH, float radiusV, Color color);
-void DrawEllipseLinesV(Vector2 center, float radiusH, float radiusV, Color color);
+// DrawEllipseV/DrawEllipseLinesV из более нового C API отсутствуют в raylib-cs 6.0.0
 void DrawRing(Vector2 center, float innerRadius, float outerRadius, float startAngle, float endAngle, int segments, Color color);
 void DrawRingLines(Vector2 center, float innerRadius, float outerRadius, float startAngle, float endAngle, int segments, Color color);
 ```
@@ -35,8 +34,7 @@ void DrawRectangleRec(Rectangle rec, Color color);
 void DrawRectangleGradientEx(Rectangle rec, Color topLeft, Color bottomLeft, Color bottomRight, Color topRight);
 void DrawRectangleLinesEx(Rectangle rec, float lineThick, Color color);
 void DrawRectangleRounded(Rectangle rec, float roundness, int segments, Color color);
-void DrawRectangleRoundedLines(Rectangle rec, float roundness, int segments, Color color);
-void DrawRectangleRoundedLinesEx(Rectangle rec, float roundness, int segments, float lineThick, Color color);
+void DrawRectangleRoundedLines(Rectangle rec, float roundness, int segments, float lineThick, Color color); // сигнатура raylib-cs 6.0.0
 ```
 
 ### Сплайны (рисование + оценка точки)
@@ -54,7 +52,7 @@ void DrawSplineBezierCubic(const Vector2 *points, int pointCount, float thick, C
 bool CheckCollisionRecs(Rectangle rec1, Rectangle rec2);
 bool CheckCollisionCircles(Vector2 center1, float radius1, Vector2 center2, float radius2);
 bool CheckCollisionCircleRec(Vector2 center, float radius, Rectangle rec);
-bool CheckCollisionCircleLine(Vector2 center, float radius, Vector2 p1, Vector2 p2);
+// CheckCollisionCircleLine из более нового C API отсутствует в raylib-cs 6.0.0
 bool CheckCollisionPointRec(Vector2 point, Rectangle rec);
 bool CheckCollisionPointCircle(Vector2 point, Vector2 center, float radius);
 bool CheckCollisionPointTriangle(Vector2 point, Vector2 p1, Vector2 p2, Vector2 p3);
@@ -65,9 +63,10 @@ Rectangle GetCollisionRec(Rectangle rec1, Rectangle rec2);
 ```
 
 ## Заметки по реализации
+- **Первый шаг:** `CheckCollisionRecs` и `CheckCollisionCircles` с существующими `Rectangle`/`Vector2`; остальные коллизии и формы — самостоятельные изменения.
 - Точки для сплайнов/`CheckCollisionPointPoly` передаются как массивы `Vector2` — переиспользуй уже готовый паттерн маршалинга массива из `DrawLineStrip`/`DrawTriangleFan`/`DrawTriangleStrip` (`COMWrapperContext.MarshalIValue` → `dynamic array` → `fixed (Vector2* ptr = ...)`).
 - `CheckCollisionLines` — `Vector2 *collisionPoint` возвращается по ссылке; в OneScript сделать это через возврат структуры (например, `IValue` с массивом из `[найдено, точка]` или отдельными методами `ЛинииПересекаются`/`ТочкаПересеченияЛиний`).
-- Коллизии стоит сделать одним из первых приоритетов в этой задаче — после их появления `examples/physics/Модули/ПомошникКолизий.os` можно упростить, используя нативные `CheckCollision*` вместо ручной геометрии.
+- Коллизии полезно реализовать рано, но замена алгоритмов `examples/physics/Модули/ПомошникКолизий.os` — отдельная задача после проверки эквивалентности поведения.
 
 ## Тестовый скрипт
 `src/testCollisions.os` — два круга/прямоугольника, при пересечении меняют цвет (визуальная проверка `CheckCollisionCircles`/`CheckCollisionRecs`).

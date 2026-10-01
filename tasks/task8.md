@@ -10,8 +10,8 @@
 ```c
 Font GetFontDefault(void);
 Font LoadFont(const char *fileName);
-Font LoadFontEx(const char *fileName, int fontSize, const int *codepoints, int codepointCount); // codepoints — передавать NULL/0 из OneScript для дефолтного набора
-bool IsFontValid(Font font);
+Font LoadFontEx(const char *fileName, int fontSize, const int *codepoints, int codepointCount); // C API; управляемую перегрузку raylib-cs см. ниже
+bool IsFontReady(Font font); // имя метода raylib-cs 6.0.0
 void UnloadFont(Font font);
 ```
 
@@ -39,9 +39,10 @@ float TextToFloat(const char *text);
 ```
 
 ## Заметки по реализации
+- **Первый шаг:** `MeasureText(text, fontSize)` с уже используемым стандартным шрифтом; визуально центрировать надпись в `src/test.os`. Не нужно добавлять новый тип или файл шрифта.
 - `Font` — новый marshalable-тип, добавить `IValueToFont` хелпер по аналогии с `IValueToTexture2D`.
-- `LoadFontEx` с `codepoints=NULL, codepointCount=0` — в OneScript экспонировать перегрузку без параметра кодпоинтов: `ЗагрузитьШрифтРасширенный(fileName, fontSize)` вызывает `Raylib.LoadFontEx(fileName, fontSize, null, 0)`.
+- В raylib-cs 6.0.0 есть управляемая перегрузка `LoadFontEx(string, int, int[], int)`: параметры кодпоинтов и владение шрифтом проверять по ней, не копировать вызов C API вслепую.
 - Строковые утилиты — низкий приоритет, OneScript и так предоставляет `СтрНайти`, `СтрЗаменить`, `СтрРазделить` и т.п.; обёртывать смысл имеет только там, где нужна 1:1 совместимость с raylib-примерами или где нужен именно `TextFormat`-стиль (`%d`, `%.2f`) для быстрой сборки строк с числами.
 
 ## Тестовый скрипт
-`src/testFonts.os` — загрузка кастомного `.ttf` из `resources/`, `DrawTextEx` с разным `fontSize`/`spacing`, текст отцентрирован через `MeasureTextEx`.
+После первого шага: `src/testFonts.os` — загрузка кастомного `.ttf`, `DrawTextEx`/`MeasureTextEx` и выгрузка `Font`. Файла `.ttf` в `resources/` пока нет: добавить тестовый шрифт вместе с этим шагом или использовать `GetFontDefault` без выгрузки стандартного шрифта.

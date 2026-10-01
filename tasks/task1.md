@@ -2,11 +2,11 @@
 
 **Модуль:** rcore (Window-related functions)
 **Приоритет:** высокий — это базовые вещи, которые нужны почти в любом приложении (изменение размера окна, получение текущих размеров экрана, полноэкранный режим).
-**Статус:** ✅ реализовано. Было: только `InitWindow`, `CloseWindow`, `WindowShouldClose`. Добавлено: состояние окна (`IsWindow*`, `Set/ClearWindowState`, `Toggle*`, `Maximize/Minimize/RestoreWindow`), заголовок/иконка/позиция/размеры окна, размеры экрана и параметры мониторов, буфер обмена, `Enable/DisableEventWaiting`. Тест: `src/testWindowState.os`.
+**Статус:** ✅ реализовано (архив направления). Было: только `InitWindow`, `CloseWindow`, `WindowShouldClose`. Добавлено: состояние окна (`IsWindow*`, `Set/ClearWindowState`, `Toggle*`, `Maximize/Minimize/RestoreWindow`), заголовок/иконка/позиция/размеры окна, размеры экрана и параметры мониторов, буфер обмена, `Enable/DisableEventWaiting`. Интерактивный пример: `src/testWindowState.os`.
 `GetClipboardImage` не реализован — отсутствует в текущей версии биндинга `Raylib-cs` 6.0.0 (в `basic_api.md` она из более новой версии raylib).
 `SetWindowIcons` реализован через `unsafe`-маршалинг массива `Image` по аналогии с `DrawLineStrip`/`DrawTriangleFan`.
 
-## Что реализовать
+## Перечень реализованного (C-сигнатуры для справки)
 
 ### Состояние окна
 ```c
@@ -64,7 +64,7 @@ const char *GetMonitorName(int monitor);
 ```c
 void SetClipboardText(const char *text);
 const char *GetClipboardText(void);
-Image GetClipboardImage(void);
+// GetClipboardImage есть в C API, но отсутствует в raylib-cs 6.0.0
 void EnableEventWaiting(void);
 void DisableEventWaiting(void);
 ```

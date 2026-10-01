@@ -12,7 +12,7 @@ Image LoadImage(const char *fileName);
 Image LoadImageFromMemory(const char *fileType, const unsigned char *fileData, int dataSize); // низкий приоритет — нужен доступ к байтам из OneScript
 Image LoadImageFromTexture(Texture2D texture);
 Image LoadImageFromScreen(void);
-bool IsImageValid(Image image);
+bool IsImageReady(Image image); // имя метода raylib-cs 6.0.0
 bool ExportImage(Image image, const char *fileName);
 Image GenImageColor(int width, int height, Color color);
 Image GenImageText(int width, int height, const char *text);
@@ -51,9 +51,10 @@ void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSiz
 (остальные `ImageDraw*` — по аналогии, добавлять при конкретной необходимости)
 
 ## Заметки по реализации
-- Все `Image *image` — функции-мутаторы. `ImageWrapper.Image` — публичное поле, так что можно писать `imgWrapper.Image = Raylib.ImageCopy(imgWrapper.Image)` либо мутировать через `ref`, если raylib-cs поддерживает — проверить сигнатуру в Raylib-cs.dll (там методы принимают `ref Image`).
+- **Первый шаг:** `LoadImage` и `IsImageReady`; проверить загрузку существующего `resources/raylib_logo.png` и выгрузку через `UnloadImage`. Изменения пикселей и GPU-загрузка — отдельные шаги.
+- Все `Image *image` — функции-мутаторы. `ImageWrapper.Image` — свойство; для мутации передать локальную копию `Image` в `ref`-перегрузку raylib-cs и записать результат обратно в свойство. `ImageCopy` создаёт **новое** изображение, его нельзя использовать вместо изменения исходного без освобождения старого ресурса.
 - `LoadImage`/`GenImageColor`/`GenImageText`/`ImageCopy`/`ImageFromImage` возвращают новый `Image` — оборачивай в `ImageWrapper`, как уже сделано в `GenImageGradientLinear` и т.д.
-- `IsImageValid` полезен сразу после `LoadImage`, чтобы явно проверять неудачную загрузку файла (сейчас никакой метод не проверяет успешность загрузки — стоит добавить проверку и в существующий `LoadTexture`, если найдётся аналог `IsTextureValid`, см. `task7.md`).
+- `IsImageReady` проверяет результат загрузки; для текстур аналогично `IsTextureReady` (см. `task7.md`). Перед выгрузкой изображения убедиться, что оно было успешно загружено.
 
 ## Тестовый скрипт
-`src/testImageManipulation.os` — `LoadImage` → `ImageResize`/`ImageRotate`/`ImageColorGrayscale` → `LoadTextureFromImage` → отрисовка результата.
+Первый шаг: `src/testImageLoad.os` — загрузка, проверка и выгрузка существующего PNG. Отдельный шаг: `src/testImageManipulation.os` — `LoadImage` → `ImageResize`/`ImageRotate`/`ImageColorGrayscale` → `LoadTextureFromImage` → отрисовка и выгрузка изображения/текстуры.

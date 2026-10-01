@@ -18,7 +18,7 @@ float GetMasterVolume(void);
 ### Sound (короткие эффекты) — высокий приоритет внутри задачи
 ```c
 Sound LoadSound(const char *fileName);
-bool IsSoundValid(Sound sound);
+bool IsSoundReady(Sound sound); // имя метода raylib-cs 6.0.0
 void UnloadSound(Sound sound);
 void PlaySound(Sound sound);
 void StopSound(Sound sound);
@@ -33,7 +33,7 @@ void SetSoundPan(Sound sound, float pan);
 ### Music (потоковая музыка) — средний приоритет
 ```c
 Music LoadMusicStream(const char *fileName);
-bool IsMusicValid(Music music);
+bool IsMusicReady(Music music); // имя метода raylib-cs 6.0.0
 void UnloadMusicStream(Music music);
 void PlayMusicStream(Music music);
 bool IsMusicStreamPlaying(Music music);
@@ -63,13 +63,13 @@ void UnloadWave(Wave wave);
 ```
 
 ## Заметки по реализации
-- `InitAudioDevice()` нужно звать один раз, аналогично `InitWindow` — задокументировать порядок в README ("звук нужно инициализировать после/до окна" — уточнить по документации raylib, обычно можно в любом порядке, но традиционно после `InitWindow`).
+- **Первый шаг:** `InitAudioDevice`/`IsAudioDeviceReady`/`CloseAudioDevice` и минимальные `LoadSound`/`IsSoundReady`/`PlaySound`/`UnloadSound`; без поддержки `Music`/`AudioStream` в той же правке. Задокументировать и проверить порядок инициализации и выгрузки в примере.
 - `UpdateMusicStream` обязателен в игровом цикле для потоковой музыки — не забыть добавить в тестовый скрипт внутри `Пока Не ОкноДолжноЗакрыться() Цикл`.
 - Новые marshalable-типы: `Sound`, `Music`, `AudioStream`, `Wave` — добавить `IValueToSound`/`IValueToMusic` хелперы по образцу существующих.
 - Русские имена: `ИнициализироватьЗвук`, `ЗагрузитьЗвук`, `ВоспроизвестиЗвук`, `ЗагрузитьМузыку`, `ВоспроизвестиМузыку`, `ОбновитьПотокМузыки`.
 
 ## Тестовый скрипт
-`src/testAudio.os` — загрузка `.wav` из `resources/`, проигрывание по нажатию клавиши; отдельно — фоновая музыка `.mp3`/`.ogg` с `UpdateMusicStream` в цикле.
+`src/testAudio.os` — загрузка `.wav`, проигрывание по нажатию клавиши, выгрузка `Sound` и закрытие устройства; фоновая музыка `.mp3`/`.ogg` с `UpdateMusicStream` — отдельный шаг.
 
 ## Предварительное условие
-Понадобится добавить аудио-файл(ы) в `resources/` (сейчас там только текстуры и `.obj`-модель) — уточнить у пользователя формат/лицензию перед добавлением бинарных файлов в репозиторий.
+Для демо понадобится небольшой доступный для распространения `.wav` в `resources/` (сейчас там только текстуры и `.obj`-модель); проверить происхождение и условия использования ассета при добавлении.

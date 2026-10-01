@@ -8,8 +8,8 @@
 
 ### Курсор
 ```c
-void EnableCursor(void);   // lock cursor
-void DisableCursor(void);  // unlock cursor
+void EnableCursor(void);   // показать курсор и разблокировать ввод
+void DisableCursor(void);  // скрыть курсор и захватить ввод
 bool IsCursorOnScreen(void);
 ```
 
@@ -37,8 +37,10 @@ void OpenURL(const char *url);
 ## Заметки по реализации
 - `GetFrameTime`/`GetTime` — самое частое, что нужно для физики/анимации (уже используется вручную через `Шаг = ФПС / 400` в `examples/physics`, но правильнее было бы через `GetFrameTime`).
 - `SetConfigFlags` нужно вызывать **до** `InitWindow` — стоит явно упомянуть это в README при документировании (аналогично примечанию "текстуры грузятся после InitWindow").
-- `unsigned int flags` для `SetConfigFlags`/`SetRandomSeed` — принимай как `int` на стороне OneScript, приводи к `uint` в C#.
+- `SetConfigFlags` принимает `ConfigFlags` в raylib-cs 6.0.0; для OneScript можно принимать `int` и приводить к `(ConfigFlags)flags`. `SetRandomSeed` принимает `uint`: продумать диапазон и проверку перед преобразованием из числа OneScript.
 - Русские имена: `ВремяКадра`, `ВремяРаботы` (`GetTime`), `ТекущийFPS`, `Подождать`, `СделатьСкриншот`, `УстановитьФлагиКонфигурации`, `ОткрытьURL`, `ВключитьКурсор`/`ОтключитьКурсор` (Enable/DisableCursor — избегать путаницы с уже занятыми `ПоказатьКурсор`/`СкрытьКурсор`, которые про видимость, а не про lock).
 
 ## Тестовый скрипт
 `src/testTiming.os` — вывод `GetFrameTime`/`GetFPS`/`GetTime` текстом на экране каждый кадр.
+
+**Первый шаг:** только эти три метода; пример сравнивает изменение времени между кадрами. Остальные пункты — отдельными изменениями.

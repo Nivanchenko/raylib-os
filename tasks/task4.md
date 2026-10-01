@@ -45,10 +45,11 @@ void UnloadShader(Shader shader);
 ```
 
 ## Заметки по реализации
-- `RenderTexture2D` — новый marshalable-тип, потребуется `IValueToRenderTexture2D` хелпер и `NewRenderTexture2D`/`LoadRenderTexture` враппер (сам `LoadRenderTexture` описан в `task7.md`, здесь только `BeginTextureMode`/`EndTextureMode`, которые его используют — реализовывать вместе).
+- **Первый шаг:** `GetScreenToWorld2D`/`GetWorldToScreen2D` с существующими `Camera2D` и `Vector2`; показать перевод координат мыши в `src/test2dcamera.os`. Не нужны новые ресурсы или типы.
+- `RenderTexture2D` — новый marshalable-тип, потребуется `IValueToRenderTexture2D` и обёртки `LoadRenderTexture`/`UnloadRenderTexture` из `task7.md`. Реализовывать с `BeginTextureMode`/`EndTextureMode` одним отдельным шагом.
 - `SetShaderValue`/`SetShaderValueV` принимают `const void *value` — на стороне OneScript придётся ограничиться конкретными перегрузками под типы (float, int, Vector2/3/4, Color) вместо универсального `void*`. Реализовать хотя бы `УстановитьЗначениеШейдераFloat`/`...Int`/`...Vector2` — не пытаться сделать единый метод под все `ShaderUniformDataType`.
-- Для `AGENTS.md`: у `Camera3D` уже есть `IValueToCamera3D`, но некоторые функции (`GetScreenToWorldRay` и т.д.) принимают `Camera` (алиас `Camera3D` в raylib-cs) — переиспользовать существующий хелпер.
+- Для 3D-камеры есть `IValueToCamera3D`; сигнатуры `GetScreenToWorldRay` и других функций проверить по пакету, не выводить тип аргумента из C-имени `Camera`.
 
 ## Тестовый скрипт
-`src/testShaderMode.os` — загрузка простого шейдера из `resources/`, применение через `BeginShaderMode`/`EndShaderMode` к текстуре.
+`src/testShaderMode.os` — загрузка и применение шейдера; файла шейдера в `resources/` пока нет, потребуется добавить подходящий пример или использовать `LoadShaderFromMemory`.
 `src/testRenderTexture.os` — рендер сцены в `RenderTexture2D` через `BeginTextureMode`, затем отрисовка результата как обычной текстуры.
