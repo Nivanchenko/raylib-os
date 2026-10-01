@@ -680,6 +680,24 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.ShowCursor();
     }
 
+    [ContextMethod("ВключитьКурсор", "EnableCursor")]
+    public void EnableCursor()
+    {
+        Raylib.EnableCursor();
+    }
+
+    [ContextMethod("ОтключитьКурсор", "DisableCursor")]
+    public void DisableCursor()
+    {
+        Raylib.DisableCursor();
+    }
+
+    [ContextMethod("КурсорНаЭкране", "IsCursorOnScreen")]
+    public bool IsCursorOnScreen()
+    {
+        return Raylib.IsCursorOnScreen();
+    }
+
     [ContextMethod("Камера2DЦель", "Camera2DTarget")]
     public IValue Camera2DTarget(IValue camera)
     {
@@ -760,6 +778,58 @@ public class Raylibos : AutoContext<Raylibos>
     public void SetTargetFPS(int fps)
     {
         Raylib.SetTargetFPS(fps);
+    }
+
+    [ContextMethod("ВремяКадра", "GetFrameTime")]
+    public decimal GetFrameTime()
+    {
+        return (decimal)Raylib.GetFrameTime();
+    }
+
+    [ContextMethod("ВремяРаботы", "GetTime")]
+    public decimal GetTime()
+    {
+        return (decimal)Raylib.GetTime();
+    }
+
+    [ContextMethod("ТекущийFPS", "GetFPS")]
+    public int GetFPS()
+    {
+        return Raylib.GetFPS();
+    }
+
+    [ContextMethod("Подождать", "WaitTime")]
+    public void WaitTime(IValue seconds)
+    {
+        Raylib.WaitTime((double)(decimal)COMWrapperContext.MarshalIValue(seconds));
+    }
+
+    [ContextMethod("УстановитьЗерноСлучайныхЧисел", "SetRandomSeed")]
+    public void SetRandomSeed(IValue seed)
+    {
+        decimal value = (decimal)COMWrapperContext.MarshalIValue(seed);
+        if (value < uint.MinValue || value > uint.MaxValue || value != decimal.Truncate(value))
+            throw new ArgumentOutOfRangeException(nameof(seed), "Seed must be a whole number in the uint range");
+
+        Raylib.SetRandomSeed((uint)value);
+    }
+
+    [ContextMethod("СделатьСкриншот", "TakeScreenshot")]
+    public void TakeScreenshot(string fileName)
+    {
+        Raylib.TakeScreenshot(fileName);
+    }
+
+    [ContextMethod("УстановитьФлагиКонфигурации", "SetConfigFlags")]
+    public void SetConfigFlags(int flags)
+    {
+        Raylib.SetConfigFlags((ConfigFlags)flags);
+    }
+
+    [ContextMethod("ОткрытьURL", "OpenURL")]
+    public void OpenURL(string url)
+    {
+        Raylib.OpenURL(url);
     }
 
     [ContextMethod("ПоказатьFPS", "DrawFPS")]

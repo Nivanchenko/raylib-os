@@ -10,6 +10,7 @@
 
 - **rcore / окно**: `InitWindow`, `WindowShouldClose`, `CloseWindow`, `BeginDrawing`, `EndDrawing`, `ClearBackground`, `SetTargetFPS`, `DrawFPS`, плюс полный набор состояния/размеров/мониторов/буфера обмена окна из `task1.md` (`IsWindow*`, `Set/ClearWindowState`, `Toggle*`, `Maximize/Minimize/RestoreWindow`, `SetWindowTitle/Icon(s)/Position/Monitor/Min/Max/Size/Opacity/Focused`, `Get*Screen/Render/Monitor*`, `GetWindowPosition/ScaleDPI`, `Get/SetClipboardText`, `Enable/DisableEventWaiting`)
 - **rcore / курсор**: `ShowCursor`, `HideCursor`, `IsCursorHidden`
+- **rcore / тайминг и misc**: `GetFrameTime`, `GetTime`, `GetFPS`, `WaitTime`, `SetRandomSeed`, `TakeScreenshot`, `SetConfigFlags`, `OpenURL`, `EnableCursor`, `DisableCursor`, `IsCursorOnScreen`
 - **rcore / ввод**: `IsKeyDown`, `IsMouseButtonPressed`, `GetMousePosition`, `GetMouseWheelMove`
 - **rcore / камера**: `BeginMode2D`/`EndMode2D`, `BeginMode3D`/`EndMode3D`, `UpdateCamera` (3D), собственные конструкторы `NewCamera2D`/`NewCamera3D` + геттеры полей Camera2D
 - **rcore / random**: `GetRandomValue`
@@ -26,7 +27,7 @@
 | Файл | Направление | Приоритет | Первый небольшой шаг |
 |---|---|---|---|
 | [task1.md](task1.md) | Окно и мониторы | Завершено | Архив реализованного; `GetClipboardImage` отсутствует в биндинге |
-| [task2.md](task2.md) | Тайминг, курсор | Средний | `GetFrameTime`, `GetTime`, `GetFPS` |
+| [task2.md](task2.md) | Тайминг, курсор | Основное завершено | `LoadRandomSequence`/`UnloadRandomSequence` — по потребности |
 | [task3.md](task3.md) | Ввод | Высокий | `IsKeyPressed` и `IsKeyReleased` |
 | [task4.md](task4.md) | Экранные координаты, рендер, шейдеры | Средний | `GetScreenToWorld2D` и `GetWorldToScreen2D` |
 | [task5.md](task5.md) | Примитивы и коллизии 2D | Высокий | `CheckCollisionRecs` и `CheckCollisionCircles` |
