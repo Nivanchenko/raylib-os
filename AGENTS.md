@@ -1,53 +1,46 @@
-# AGENTS.md — Raylib-os
+# Работа с репозиторием Raylib-os
 
-## Project overview
-- OneScript wrapper around [raylib-cs](https://github.com/raylib-cs/raylib-cs) (C# bindings for [raylib](https://www.raylib.com))
-- Target: expose raylib graphics capabilities (2D/3D, shaders) to OneScript language
-- Status: early experimental stage
+Обёртка над raylib-cs для OneScript. Проект экспериментальный; основная работа — добавление методов raylib в публичный контекст `Рейлиб` / `Raylib`.
 
-## Build & run
+## Карта проекта и источники истины
+
+- `src/raylibos/Raylibos.cs` — публичные методы, преобразование типов и класс `ImageWrapper`.
+- `src/raylibos/raylibos.csproj` — целевая платформа .NET 6, версии пакетов OneScript и Raylib-cs; сборка использует NuGet-пакеты.
+- `basic_api.md` — справочник по C API raylib, **не** спецификация сигнатур C# raylib-cs. Фактическую сигнатуру проверяйте по установленному пакету и компиляцией.
+- `tasks/README.md` и `tasks/task*.md` — план покрытия API и идеи задач. Перед реализацией сверяйте статус с `Raylibos.cs`: план может устареть.
+- `src/test*.os` — интерактивные примеры по возможностям API; `examples/physics/app.os` — отдельный пример физики на OneScript.
+- `resources/` — ассеты для примеров; `dependency/` — готовые платформенные бинарники, не удаляйте их и не путайте с зависимостями из `.csproj`.
+- `README.md` — документация для пользователя, русские имена методов и примеры вызовов.
+
+## Проверка изменений (из корня репозитория)
+
+Нужен .NET SDK с поддержкой net6.0. Для проверки синтаксиса и запуска примеров нужен OneScript (`oscript`).
 
 ```bash
-# Build the library (requires .NET 6+)
 dotnet build src/raylibos/raylibos.csproj
+for script in src/test*.os; do oscript -check "$script" || exit 1; done
+oscript -check examples/physics/app.os
+```
 
-# Run test script (requires OneScript/OScript)
+`-check` проверяет синтаксис, но не вызовы raylib и не загрузку DLL. При отсутствии `oscript` в `PATH` используйте путь к установленному исполняемому файлу или сообщите, что проверка синтаксиса недоступна. В репозитории нет автоматических тестов и CI. Для изменения поведения дополнительно запустите подходящий пример с доступным графическим окружением:
+
+```bash
+dotnet build src/raylibos/raylibos.csproj
 oscript src/test.os
 ```
 
-## Structure
-```
-src/
-  raylibos/
-    Raylibos.cs      # Main context class [ContextClass("Рейлиб", "Raylib")]
-    raylibos.csproj  # .NET 6.0, references: OneScript 2.0.0-rc.8, Raylib-cs 6.0.0
-  test*.os           # 13 demo scripts, one per feature area (see README "Тестовые файлы")
-dependency/          # Prebuilt Raylib-cs.dll + native libs (Linux/MacOS/Windows)
-resources/           # Sample textures/models used by test scripts
-examples/physics/    # Standalone 2D physics engine written in OneScript; uses raylibos only for rendering (see its README-equivalent: no docs yet, read app.os)
-basic_api.md         # Reference dump of raylib's C API signatures, grouped by module (rcore, rshapes, rtextures, rmodels, ...) — use it to check what's still unwrapped in Raylibos.cs
-raylibos.sln         # VS solution wrapping src/raylibos
-```
+Окно инициализируется в демо, большинство из них работают до закрытия окна. Для примеров с текстурами/моделями запускайте команду из корня репозитория: ресурсы указываются как `resources/...` относительно рабочего каталога. `src/test*.os` загружают DLL относительно расположения скрипта (`src/raylibos/bin/Debug/net6.0/raylibos.dll`); сначала нужна сборка в конфигурации Debug. Для физического примера: `oscript examples/physics/app.os` (путь к DLL в нём также относителен к скрипту).
 
-## Key conventions
-- Methods exposed to OneScript use `[ContextMethod("RussianName", "EnglishName")]`
-- Constructor uses `[ScriptConstructor]` attribute
-- Color/Vector2/Vector3/Rectangle/Camera2D/Camera3D/Model/BoundingBox/Texture2D marshaling via `COMWrapperContext.Create()` and `MarshalIValue()`
-- Exception: `Image` is wrapped in its own `AutoContext` class (`ImageWrapper`) instead of going through `COMWrapperContext.Create()` — relevant when touching `GenImage*`, `LoadTextureFromImage`, or `UnloadImage`
-- Russian method names are primary; English names are aliases
+## Добавление метода
 
-## Adding a new wrapped method
-1. Look up the C signature in `basic_api.md` (grouped by raylib module)
-2. Add a `[ContextMethod("RussianName", "EnglishName")]` to `Raylibos.cs`, converting params/return via the `IValueTo*` helpers at the bottom of the class
-3. Add or extend a `.os` test script under `src/` demonstrating the new method
-4. Document the method in README.md under the matching section
+1. Выберите небольшой фрагмент задачи из `tasks/`, найдите аналогичный метод в `Raylibos.cs` и проверьте, что нужного метода ещё нет (включая его русское и английское имена).
+2. Сверьте назначение и C-сигнатуру с `basic_api.md`, затем проверьте типы, порядок аргументов и наличие метода в используемой версии raylib-cs. Сохраняйте существующие публичные имена: например, `КлавишаНажата` уже означает `IsKeyDown`.
+3. Добавьте `[ContextMethod("РусскоеИмя", "EnglishName")]` в `Raylibos.cs`; если нужен новый тип, расширьте преобразования у конца класса. Обычные структуры (`Color`, `Vector2/3`, `Rectangle`, камеры, `Model`, `BoundingBox`, `Texture2D`) передаются через `COMWrapperContext.Create()` и `MarshalIValue()`; `Image` передаётся через `ImageWrapper : AutoContext<ImageWrapper>`.
+4. Добавьте или обновите тематический `src/test*.os` с реальным вызовом и освобождением ресурсов. Для GPU-ресурсов сначала инициализируйте окно; по окончании выгрузите текстуру/модель и закройте окно. Обновите соответствующий раздел `README.md` и при необходимости статус задачи в `tasks/`.
+5. Соберите проект, проверьте синтаксис скриптов и, если есть графическая среда, запустите затронутое демо. Если GUI недоступен, явно укажите, что визуальная проверка не выполнялась.
 
-## VS Code debugging
-- Debug config in `.vscode/launch.json` uses `/Users/nikita.ivanchenko/.local/share/ovm/current/bin/oscript`
-- Debug port: 2801, working directory: `${workspaceRoot}/src`
+## Границы изменений
 
-## Important notes
-- No tests or CI configured yet
-- `dependency/` contains platform-specific native libraries — do not remove
-- Build output goes to `src/raylibos/bin/` and `obj/` (gitignored except for Debug DLL used by test.os)
-- Test script loads DLL via relative path: `raylibos/bin/Debug/net6.0/raylibos.dll` (from `src/`) or `../../src/raylibos/bin/Debug/net6.0/raylibos.dll` (from `examples/physics/`)
+- Перед правками смотрите `git status` и diff: в рабочем дереве могут быть чужие незакоммиченные изменения. Не перезаписывайте их и не удаляйте бинарники из `dependency/`.
+- Не добавляйте в Git результат сборки: `bin/` и `obj/` игнорируются. Также локально игнорируются `.vscode/` и `raylibos.sln`; не полагайтесь на них как на часть инструкции для всех разработчиков.
+- Сохраняйте пару русское имя / английский alias и существующие публичные имена OneScript. Не считайте успешную компиляцию доказательством корректности маршалинга или поведения окна.
