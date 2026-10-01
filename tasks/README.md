@@ -11,7 +11,7 @@
 - **rcore / окно**: `InitWindow`, `WindowShouldClose`, `CloseWindow`, `BeginDrawing`, `EndDrawing`, `ClearBackground`, `SetTargetFPS`, `DrawFPS`, плюс полный набор состояния/размеров/мониторов/буфера обмена окна из `task1.md` (`IsWindow*`, `Set/ClearWindowState`, `Toggle*`, `Maximize/Minimize/RestoreWindow`, `SetWindowTitle/Icon(s)/Position/Monitor/Min/Max/Size/Opacity/Focused`, `Get*Screen/Render/Monitor*`, `GetWindowPosition/ScaleDPI`, `Get/SetClipboardText`, `Enable/DisableEventWaiting`)
 - **rcore / курсор**: `ShowCursor`, `HideCursor`, `IsCursorHidden`
 - **rcore / тайминг и misc**: `GetFrameTime`, `GetTime`, `GetFPS`, `WaitTime`, `SetRandomSeed`, `TakeScreenshot`, `SetConfigFlags`, `OpenURL`, `EnableCursor`, `DisableCursor`, `IsCursorOnScreen`
-- **rcore / ввод**: `IsKeyDown`, `IsMouseButtonPressed`, `GetMousePosition`, `GetMouseWheelMove`
+- **rcore / ввод**: клавиатура (`IsKeyPressed/Repeat/Down/Released/Up`, `GetKeyPressed`, `GetCharPressed`, `SetExitKey`), мышь (`IsMouseButton*`, `Get/SetMouse*`), геймпад, касания и жесты из `task3.md` (кроме методов, отсутствующих в raylib-cs 6.0.0)
 - **rcore / камера**: `BeginMode2D`/`EndMode2D`, `BeginMode3D`/`EndMode3D`, `UpdateCamera` (3D), собственные конструкторы `NewCamera2D`/`NewCamera3D` + геттеры полей Camera2D
 - **rcore / random**: `GetRandomValue`
 - **rshapes**: `DrawCircle`, `DrawCircleGradient`, `DrawCircleLines`, `DrawEllipse`, `DrawEllipseLines`, `DrawRectangle`, `DrawRectangleLines`, `DrawRectangleGradientV/H`, `DrawRectanglePro`, `DrawTriangle`, `DrawTriangleLines`, `DrawLine`, `DrawLineStrip`, `DrawTriangleFan`, `DrawTriangleStrip`, `DrawPoly`, `DrawPolyLines`, `DrawPolyLinesEx`
@@ -28,7 +28,7 @@
 |---|---|---|---|
 | [task1.md](task1.md) | Окно и мониторы | Завершено | Архив реализованного; `GetClipboardImage` отсутствует в биндинге |
 | [task2.md](task2.md) | Тайминг, курсор | Основное завершено | `LoadRandomSequence`/`UnloadRandomSequence` — по потребности |
-| [task3.md](task3.md) | Ввод | Высокий | `IsKeyPressed` и `IsKeyReleased` |
+| [task3.md](task3.md) | Ввод | Основное завершено | `GetKeyName`/`SetGamepadVibration` отсутствуют в биндинге; проверить на физических устройствах |
 | [task4.md](task4.md) | Экранные координаты, рендер, шейдеры | Средний | `GetScreenToWorld2D` и `GetWorldToScreen2D` |
 | [task5.md](task5.md) | Примитивы и коллизии 2D | Высокий | `CheckCollisionRecs` и `CheckCollisionCircles` |
 | [task6.md](task6.md) | Изображения (CPU) | Средний | `LoadImage`, `IsImageReady` |

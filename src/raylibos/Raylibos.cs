@@ -655,6 +655,48 @@ public class Raylibos : AutoContext<Raylibos>
         return Raylib.IsKeyDown((KeyboardKey)key);
     }
 
+    [ContextMethod("КлавишаНажатаОдин", "IsKeyPressed")]
+    public bool IsKeyPressed(int key)
+    {
+        return Raylib.IsKeyPressed((KeyboardKey)key);
+    }
+
+    [ContextMethod("КлавишаПовторноНажата", "IsKeyPressedRepeat")]
+    public bool IsKeyPressedRepeat(int key)
+    {
+        return Raylib.IsKeyPressedRepeat((KeyboardKey)key);
+    }
+
+    [ContextMethod("КлавишаОтпущена", "IsKeyReleased")]
+    public bool IsKeyReleased(int key)
+    {
+        return Raylib.IsKeyReleased((KeyboardKey)key);
+    }
+
+    [ContextMethod("КлавишаНеНажата", "IsKeyUp")]
+    public bool IsKeyUp(int key)
+    {
+        return Raylib.IsKeyUp((KeyboardKey)key);
+    }
+
+    [ContextMethod("ПолучитьНажатуюКлавишу", "GetKeyPressed")]
+    public int GetKeyPressed()
+    {
+        return Raylib.GetKeyPressed();
+    }
+
+    [ContextMethod("ПолучитьВведенныйСимвол", "GetCharPressed")]
+    public int GetCharPressed()
+    {
+        return Raylib.GetCharPressed();
+    }
+
+    [ContextMethod("УстановитьКлавишуВыхода", "SetExitKey")]
+    public void SetExitKey(int key)
+    {
+        Raylib.SetExitKey((KeyboardKey)key);
+    }
+
     [ContextMethod("ПозицияМыши", "GetMousePosition")]
     public IValue GetMousePosition()
     {
@@ -666,6 +708,210 @@ public class Raylibos : AutoContext<Raylibos>
     public bool IsMouseButtonPressed(int button)
     {
         return Raylib.IsMouseButtonPressed((MouseButton)button);
+    }
+
+    [ContextMethod("КнопкаМышиЗажата", "IsMouseButtonDown")]
+    public bool IsMouseButtonDown(int button)
+    {
+        return Raylib.IsMouseButtonDown((MouseButton)button);
+    }
+
+    [ContextMethod("КнопкаМышиОтпущена", "IsMouseButtonReleased")]
+    public bool IsMouseButtonReleased(int button)
+    {
+        return Raylib.IsMouseButtonReleased((MouseButton)button);
+    }
+
+    [ContextMethod("КнопкаМышиНеНажата", "IsMouseButtonUp")]
+    public bool IsMouseButtonUp(int button)
+    {
+        return Raylib.IsMouseButtonUp((MouseButton)button);
+    }
+
+    [ContextMethod("МышьX", "GetMouseX")]
+    public int GetMouseX()
+    {
+        return Raylib.GetMouseX();
+    }
+
+    [ContextMethod("МышьY", "GetMouseY")]
+    public int GetMouseY()
+    {
+        return Raylib.GetMouseY();
+    }
+
+    [ContextMethod("СмещениеМыши", "GetMouseDelta")]
+    public IValue GetMouseDelta()
+    {
+        return COMWrapperContext.Create(Raylib.GetMouseDelta());
+    }
+
+    [ContextMethod("УстановитьПозициюМыши", "SetMousePosition")]
+    public void SetMousePosition(int x, int y)
+    {
+        Raylib.SetMousePosition(x, y);
+    }
+
+    [ContextMethod("УстановитьСмещениеМыши", "SetMouseOffset")]
+    public void SetMouseOffset(int offsetX, int offsetY)
+    {
+        Raylib.SetMouseOffset(offsetX, offsetY);
+    }
+
+    [ContextMethod("УстановитьМасштабМыши", "SetMouseScale")]
+    public void SetMouseScale(IValue scaleX, IValue scaleY)
+    {
+        Raylib.SetMouseScale(IValueToFloat(scaleX), IValueToFloat(scaleY));
+    }
+
+    [ContextMethod("КолесоМышиВектор", "GetMouseWheelMoveV")]
+    public IValue GetMouseWheelMoveV()
+    {
+        return COMWrapperContext.Create(Raylib.GetMouseWheelMoveV());
+    }
+
+    [ContextMethod("УстановитьКурсорМыши", "SetMouseCursor")]
+    public void SetMouseCursor(int cursor)
+    {
+        Raylib.SetMouseCursor((MouseCursor)cursor);
+    }
+
+    [ContextMethod("ГеймпадДоступен", "IsGamepadAvailable")]
+    public bool IsGamepadAvailable(int gamepad)
+    {
+        return Raylib.IsGamepadAvailable(gamepad);
+    }
+
+    [ContextMethod("ИмяГеймпада", "GetGamepadName")]
+    public string GetGamepadName(int gamepad)
+    {
+        return Raylib.GetGamepadName_(gamepad);
+    }
+
+    [ContextMethod("КнопкаГеймпадаНажата", "IsGamepadButtonPressed")]
+    public bool IsGamepadButtonPressed(int gamepad, int button)
+    {
+        return Raylib.IsGamepadButtonPressed(gamepad, (GamepadButton)button);
+    }
+
+    [ContextMethod("КнопкаГеймпадаЗажата", "IsGamepadButtonDown")]
+    public bool IsGamepadButtonDown(int gamepad, int button)
+    {
+        return Raylib.IsGamepadButtonDown(gamepad, (GamepadButton)button);
+    }
+
+    [ContextMethod("КнопкаГеймпадаОтпущена", "IsGamepadButtonReleased")]
+    public bool IsGamepadButtonReleased(int gamepad, int button)
+    {
+        return Raylib.IsGamepadButtonReleased(gamepad, (GamepadButton)button);
+    }
+
+    [ContextMethod("КнопкаГеймпадаНеНажата", "IsGamepadButtonUp")]
+    public bool IsGamepadButtonUp(int gamepad, int button)
+    {
+        return Raylib.IsGamepadButtonUp(gamepad, (GamepadButton)button);
+    }
+
+    [ContextMethod("ПоследняяКнопкаГеймпада", "GetGamepadButtonPressed")]
+    public int GetGamepadButtonPressed()
+    {
+        return (int)Raylib.GetGamepadButtonPressed();
+    }
+
+    [ContextMethod("КоличествоОсейГеймпада", "GetGamepadAxisCount")]
+    public int GetGamepadAxisCount(int gamepad)
+    {
+        return Raylib.GetGamepadAxisCount(gamepad);
+    }
+
+    [ContextMethod("ОсьГеймпада", "GetGamepadAxisMovement")]
+    public decimal GetGamepadAxisMovement(int gamepad, int axis)
+    {
+        return (decimal)Raylib.GetGamepadAxisMovement(gamepad, (GamepadAxis)axis);
+    }
+
+    [ContextMethod("УстановитьРаскладкуГеймпада", "SetGamepadMappings")]
+    public int SetGamepadMappings(string mappings)
+    {
+        return Raylib.SetGamepadMappings(mappings);
+    }
+
+    [ContextMethod("КасаниеX", "GetTouchX")]
+    public int GetTouchX()
+    {
+        return Raylib.GetTouchX();
+    }
+
+    [ContextMethod("КасаниеY", "GetTouchY")]
+    public int GetTouchY()
+    {
+        return Raylib.GetTouchY();
+    }
+
+    [ContextMethod("ПозицияКасания", "GetTouchPosition")]
+    public IValue GetTouchPosition(int index)
+    {
+        return COMWrapperContext.Create(Raylib.GetTouchPosition(index));
+    }
+
+    [ContextMethod("ИдентификаторКасания", "GetTouchPointId")]
+    public int GetTouchPointId(int index)
+    {
+        return Raylib.GetTouchPointId(index);
+    }
+
+    [ContextMethod("КоличествоКасаний", "GetTouchPointCount")]
+    public int GetTouchPointCount()
+    {
+        return Raylib.GetTouchPointCount();
+    }
+
+    [ContextMethod("УстановитьДоступныеЖесты", "SetGesturesEnabled")]
+    public void SetGesturesEnabled(int flags)
+    {
+        Raylib.SetGesturesEnabled((Gesture)flags);
+    }
+
+    [ContextMethod("ЖестОбнаружен", "IsGestureDetected")]
+    public bool IsGestureDetected(int gesture)
+    {
+        return Raylib.IsGestureDetected((Gesture)gesture);
+    }
+
+    [ContextMethod("ПоследнийЖест", "GetGestureDetected")]
+    public int GetGestureDetected()
+    {
+        return (int)Raylib.GetGestureDetected();
+    }
+
+    [ContextMethod("ВремяУдержанияЖеста", "GetGestureHoldDuration")]
+    public decimal GetGestureHoldDuration()
+    {
+        return (decimal)Raylib.GetGestureHoldDuration();
+    }
+
+    [ContextMethod("ВекторПеретаскиванияЖеста", "GetGestureDragVector")]
+    public IValue GetGestureDragVector()
+    {
+        return COMWrapperContext.Create(Raylib.GetGestureDragVector());
+    }
+
+    [ContextMethod("УголПеретаскиванияЖеста", "GetGestureDragAngle")]
+    public decimal GetGestureDragAngle()
+    {
+        return (decimal)Raylib.GetGestureDragAngle();
+    }
+
+    [ContextMethod("ВекторМасштабированияЖеста", "GetGesturePinchVector")]
+    public IValue GetGesturePinchVector()
+    {
+        return COMWrapperContext.Create(Raylib.GetGesturePinchVector());
+    }
+
+    [ContextMethod("УголМасштабированияЖеста", "GetGesturePinchAngle")]
+    public decimal GetGesturePinchAngle()
+    {
+        return (decimal)Raylib.GetGesturePinchAngle();
     }
 
     [ContextMethod("КурсорСкрыт", "IsCursorHidden")]

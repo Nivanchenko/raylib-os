@@ -2,9 +2,9 @@
 
 **Модуль:** rcore (Input Handling) + rgestures
 **Приоритет:** высокий для клавиатуры/мыши, низкий для геймпада/тач/жестов (нишевые сценарии).
-**Статус:** реализовано только `IsKeyDown`, `IsMouseButtonPressed`, `GetMousePosition`, `GetMouseWheelMove`. Всё остальное отсутствует, хотя для игр критично различать "нажата один раз" / "зажата" / "отпущена".
+**Статус:** ✅ реализованы клавиатура, мышь, геймпад, тач и жесты из списка ниже, кроме `GetKeyName` и `SetGamepadVibration` (отсутствуют в используемом raylib-cs 6.0.0). Клавиатура/мышь и опрос доступности геймпада/касаний проверены в оконном демо `src/testInput.os`; поведение с физическим геймпадом и тач-устройством требует проверки на таком устройстве.
 
-## Что реализовать
+## Перечень методов (C-сигнатуры для справки)
 
 ### Клавиатура (высокий приоритет)
 ```c
@@ -14,7 +14,7 @@ bool IsKeyReleased(int key);       // один раз при отпускани�
 bool IsKeyUp(int key);
 int GetKeyPressed(void);           // очередь кодов клавиш
 int GetCharPressed(void);          // очередь unicode-символов
-const char *GetKeyName(int key);
+// GetKeyName отсутствует в raylib-cs 6.0.0
 void SetExitKey(int key);
 ```
 
@@ -45,7 +45,7 @@ int GetGamepadButtonPressed(void);
 int GetGamepadAxisCount(int gamepad);
 float GetGamepadAxisMovement(int gamepad, int axis);
 int SetGamepadMappings(const char *mappings);
-void SetGamepadVibration(int gamepad, float leftMotor, float rightMotor, float duration);
+// SetGamepadVibration отсутствует в raylib-cs 6.0.0
 ```
 
 ### Тач (низкий приоритет)
@@ -70,12 +70,12 @@ float GetGesturePinchAngle(void);
 ```
 
 ## Заметки по реализации
-- **Первый шаг:** `IsKeyPressed`/`IsKeyReleased` рядом с существующим `IsKeyDown`; показать отличие краткого события от удержания в `src/testKeyDown.os`. Мышь, геймпад, тач и жесты — отдельные шаги.
-- Для `GetKeyName`, `SetGamepadVibration` и других пунктов из C API сначала подтвердить наличие в установленном raylib-cs 6.0.0; при отсутствии не вводить обещающий alias без реализации.
-- `IsKeyPressed` vs `IsKeyDown` — сейчас в тестах (`testKeyDown.os`) используется только `IsKeyDown`, а для UI/меню обычно нужен именно `IsKeyPressed` (одно срабатывание). Стоит явно показать разницу в тестовом скрипте.
-- Именование пересекается с уже занятым `КлавишаНажата` = `IsKeyDown`. Для новых нужно аккуратно развести смысл, например: `КлавишаНажатаОдин` (`IsKeyPressed`), `КлавишаОтпущена` (`IsKeyReleased`), `КлавишаНеНажата` (`IsKeyUp`). Аналогично для мыши: `КнопкаМышиЗажата` (`IsMouseButtonDown`), `КнопкаМышиОтпущена` (`IsMouseButtonReleased`).
-- Геймпад/тач/жесты — реализовывать в последнюю очередь, только если появится конкретный сценарий использования.
+- `КлавишаНажата` исторически означает `IsKeyDown` (удержание); `КлавишаНажатаОдин` означает `IsKeyPressed` (один кадр). Для отпускания используется `КлавишаОтпущена`.
+- `GetKeyPressed`/`GetCharPressed` извлекают **один** элемент очереди за вызов, возвращают 0 при пустой очереди; для получения всех событий за кадр вызывайте в цикле до 0.
+- Имена геймпада запрашивайте только после `IsGamepadAvailable`; индекс касания — только после `GetTouchPointCount`. Перечисления `KeyboardKey`, `MouseButton`, `GamepadButton`, `GamepadAxis`, `MouseCursor`, `Gesture` принимаются как числовые коды в OneScript.
+- `GetGestureHoldDuration` возвращает миллисекунды, значения Vector2 доступны через `ВекторX`/`ВекторY`.
 
 ## Тестовый скрипт
-`src/testKeyDown.os` — расширить: показать нажатие/отпускание в текущем кадре рядом с удержанием клавиши.
-`src/testMouseButtons.os` — расширение `testMouse.os`: down/released/up для всех трёх кнопок.
+`src/testKeyDown.os` — удержание стрелок и события нажатия/отпускания RIGHT.
+`src/testMouse.os` — видимость курсора, нажатие и состояние левой кнопки мыши.
+`src/testInput.os` — ограниченный по времени пример клавиатуры/мыши, опроса геймпада, касаний и жестов.
