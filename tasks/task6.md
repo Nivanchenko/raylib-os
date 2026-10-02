@@ -2,7 +2,7 @@
 
 **Модуль:** rtextures (Image loading / generation / manipulation / drawing-on-image)
 **Приоритет:** средний — генераторы шума/градиентов уже есть, но загрузка изображений из файла и любое редактирование пикселей отсутствует.
-**Статус:** реализованы только генераторы (`GenImageGradient*`, `GenImageChecked`, `GenImageWhiteNoise`, `GenImagePerlinNoise`, `GenImageCellular`), `LoadTextureFromImage`, `UnloadImage`.
+**Статус:** реализованы `LoadImage`, `IsImageReady`, генераторы (`GenImageGradient*`, `GenImageChecked`, `GenImageWhiteNoise`, `GenImagePerlinNoise`, `GenImageCellular`), `LoadTextureFromImage`, `UnloadImage`. Экспорт, модификация и рисование на изображении пока не реализованы.
 
 ## Что реализовать
 
@@ -51,7 +51,7 @@ void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSiz
 (остальные `ImageDraw*` — по аналогии, добавлять при конкретной необходимости)
 
 ## Заметки по реализации
-- **Первый шаг:** `LoadImage` и `IsImageReady`; проверить загрузку существующего `resources/raylib_logo.png` и выгрузку через `UnloadImage`. Изменения пикселей и GPU-загрузка — отдельные шаги.
+- **Первый шаг выполнен:** `LoadImage` и `IsImageReady`; `src/testImageLoad.os` проверяет загрузку `resources/raylib_logo.png`, размер 256×256, отсутствие файла и выгрузку через `UnloadImage`. В комплекте с raylib-cs 6.0.0 нативная raylib 5.5 экспортирует `IsImageValid` вместо `IsImageReady` — обёртка поддерживает оба имени. Изменения пикселей и GPU-загрузка — отдельные шаги.
 - Все `Image *image` — функции-мутаторы. `ImageWrapper.Image` — свойство; для мутации передать локальную копию `Image` в `ref`-перегрузку raylib-cs и записать результат обратно в свойство. `ImageCopy` создаёт **новое** изображение, его нельзя использовать вместо изменения исходного без освобождения старого ресурса.
 - `LoadImage`/`GenImageColor`/`GenImageText`/`ImageCopy`/`ImageFromImage` возвращают новый `Image` — оборачивай в `ImageWrapper`, как уже сделано в `GenImageGradientLinear` и т.д.
 - `IsImageReady` проверяет результат загрузки; для текстур аналогично `IsTextureReady` (см. `task7.md`). Перед выгрузкой изображения убедиться, что оно было успешно загружено.

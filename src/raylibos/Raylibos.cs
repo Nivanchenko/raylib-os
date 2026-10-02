@@ -44,9 +44,13 @@ public class Raylibos : AutoContext<Raylibos>
     [DllImport("raylib", EntryPoint = "IsRenderTextureValid", CallingConvention = CallingConvention.Cdecl)]
     private static extern byte IsRenderTextureValidNative(RenderTexture2D target);
 
+    [DllImport("raylib", EntryPoint = "IsImageValid", CallingConvention = CallingConvention.Cdecl)]
+    private static extern byte IsImageValidNative(Image image);
+
     private static bool _useNewRayName;
     private static bool _useNewShaderName;
     private static bool _useNewRenderTextureName;
+    private static bool _useNewImageName;
 
     [ScriptConstructor]
     public static Raylibos Constructor()
@@ -1416,6 +1420,30 @@ public class Raylibos : AutoContext<Raylibos>
     {
         Rectangle rect = new Rectangle(IValueToFloat(x), IValueToFloat(y), IValueToFloat(width), IValueToFloat(height));
         return COMWrapperContext.Create(rect);
+    }
+
+    [ContextMethod("ЗагрузитьИзображение", "LoadImage")]
+    public IValue LoadImage(string fileName)
+    {
+        return new ImageWrapper { Image = Raylib.LoadImage(fileName) };
+    }
+
+    [ContextMethod("ИзображениеГотово", "IsImageReady")]
+    public bool IsImageReady(IValue image)
+    {
+        Image value = IValueToImage(image);
+        if (_useNewImageName)
+            return IsImageValidNative(value) != 0;
+
+        try
+        {
+            return Raylib.IsImageReady(value);
+        }
+        catch (EntryPointNotFoundException)
+        {
+            _useNewImageName = true;
+            return IsImageValidNative(value) != 0;
+        }
     }
 
     [ContextMethod("ГенерироватьГрадиентЛинейный", "GenImageGradientLinear")]
