@@ -47,10 +47,14 @@ public class Raylibos : AutoContext<Raylibos>
     [DllImport("raylib", EntryPoint = "IsImageValid", CallingConvention = CallingConvention.Cdecl)]
     private static extern byte IsImageValidNative(Image image);
 
+    [DllImport("raylib", EntryPoint = "IsSoundValid", CallingConvention = CallingConvention.Cdecl)]
+    private static extern byte IsSoundValidNative(Sound sound);
+
     private static bool _useNewRayName;
     private static bool _useNewShaderName;
     private static bool _useNewRenderTextureName;
     private static bool _useNewImageName;
+    private static bool _useNewSoundName;
 
     [ScriptConstructor]
     public static Raylibos Constructor()
@@ -1565,6 +1569,60 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.UnloadImage(imgWrapper.Image);
     }
 
+    [ContextMethod("ИнициализироватьЗвук", "InitAudioDevice")]
+    public void InitAudioDevice()
+    {
+        Raylib.InitAudioDevice();
+    }
+
+    [ContextMethod("ЗвуковоеУстройствоГотово", "IsAudioDeviceReady")]
+    public bool IsAudioDeviceReady()
+    {
+        return Raylib.IsAudioDeviceReady();
+    }
+
+    [ContextMethod("ЗакрытьЗвуковоеУстройство", "CloseAudioDevice")]
+    public void CloseAudioDevice()
+    {
+        Raylib.CloseAudioDevice();
+    }
+
+    [ContextMethod("ЗагрузитьЗвук", "LoadSound")]
+    public IValue LoadSound(string fileName)
+    {
+        return COMWrapperContext.Create(Raylib.LoadSound(fileName));
+    }
+
+    [ContextMethod("ЗвукГотов", "IsSoundReady")]
+    public bool IsSoundReady(IValue sound)
+    {
+        Sound value = IValueToSound(sound);
+        if (_useNewSoundName)
+            return IsSoundValidNative(value) != 0;
+
+        try
+        {
+            return Raylib.IsSoundReady(value);
+        }
+        catch (EntryPointNotFoundException)
+        {
+            _useNewSoundName = true;
+            return IsSoundValidNative(value) != 0;
+        }
+    }
+
+    [ContextMethod("ВоспроизвестиЗвук", "PlaySound")]
+    public void PlaySound(IValue sound)
+    {
+        Raylib.PlaySound(IValueToSound(sound));
+    }
+
+    [ContextMethod("ВыгрузитьЗвук", "UnloadSound")]
+    public void UnloadSound(IValue sound)
+    {
+        Raylib.UnloadSound(IValueToSound(sound));
+    }
+
     // Вспомогательные функции
 
     private Color IValueToColor(IValue color)
@@ -1633,5 +1691,10 @@ public class Raylibos : AutoContext<Raylibos>
     {
         ImageWrapper imgWrapper = (ImageWrapper)COMWrapperContext.MarshalIValue(image);
         return imgWrapper.Image;
+    }
+
+    private Sound IValueToSound(IValue sound)
+    {
+        return (Sound)COMWrapperContext.MarshalIValue(sound);
     }
 }

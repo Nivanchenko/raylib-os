@@ -19,7 +19,7 @@
 - **rtextures**: `LoadTexture`, `UnloadTexture`, `DrawTexture`, `DrawTextureEx`, `DrawTextureRec`, `DrawTexturePro`, render texture, `LoadImage`, `IsImageReady`, `Fade`, `ColorAlpha`, генераторы `GenImageGradientLinear/Radial/Square`, `GenImageChecked`, `GenImageWhiteNoise`, `GenImagePerlinNoise`, `GenImageCellular`, `LoadTextureFromImage`, `UnloadImage`
 - **rtext**: `DrawText`, `DrawFPS`, `MeasureText` для стандартного шрифта
 - **rmodels**: `LoadModel`, `UnloadModel`, `DrawModel`, `GetModelBoundingBox`, `DrawBoundingBox`, `DrawGrid`, `DrawCube`, `DrawCubeWires`, `DrawLine3D`, `DrawSphere`, `CheckCollisionSpheres`, `CheckCollisionBoxes`, `NewBoundingBox`, `SetModelTexture` (кастомный helper, не из raylib)
-- **raudio**: ничего
+- **raudio**: инициализация и закрытие устройства, проверка готовности, загрузка/проверка/воспроизведение/выгрузка `Sound`
 
 ## Задачи на реализацию недостающего
 
@@ -37,7 +37,7 @@
 | [task8.md](task8.md) | Шрифты и текст | Средний, начато | `GetFontDefault` и `MeasureTextEx` |
 | [task9.md](task9.md) | 3D-примитивы | Средний, начато | `DrawSphereWires`, `DrawCylinder` |
 | [task10.md](task10.md) | Меши, материалы, анимации | Низкий, начато | `CheckCollisionBoxSphere` или генерация мешей при необходимости |
-| [task11.md](task11.md) | Аудио | По потребности | Устройство + короткий `Sound` |
+| [task11.md](task11.md) | Аудио | По потребности, начато | Настройки `Sound` и потоковая музыка — отдельно |
 | [task12.md](task12.md) | Файлы, automation | По потребности | Перетаскивание файлов в окно |
 
 ## Общие правила для всех задач
