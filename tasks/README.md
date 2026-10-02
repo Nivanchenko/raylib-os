@@ -16,7 +16,7 @@
 - **rcore / режимы и шейдеры**: render texture, `Begin/EndTextureMode`, `Begin/EndShaderMode`, `Begin/EndBlendMode`, `Begin/EndScissorMode`, загрузка шейдеров, uniform float/int/Vector2/Vector3/float[]/матрица/текстура
 - **rcore / random**: `GetRandomValue`
 - **rshapes**: `DrawCircle`, `DrawCircleGradient`, `DrawCircleLines`, `DrawEllipse`, `DrawEllipseLines`, `DrawRectangle`, `DrawRectangleLines`, `DrawRectangleGradientV/H`, `DrawRectanglePro`, `DrawTriangle`, `DrawTriangleLines`, `DrawLine`, `DrawLineStrip`, `DrawTriangleFan`, `DrawTriangleStrip`, `DrawPoly`, `DrawPolyLines`, `DrawPolyLinesEx`, `CheckCollisionRecs`, `CheckCollisionCircles`
-- **rtextures**: `LoadTexture`, `UnloadTexture`, `DrawTexture`, `DrawTextureEx`, `DrawTextureRec`, `DrawTexturePro`, render texture, `LoadImage`, `IsImageReady`, генераторы `GenImageGradientLinear/Radial/Square`, `GenImageChecked`, `GenImageWhiteNoise`, `GenImagePerlinNoise`, `GenImageCellular`, `LoadTextureFromImage`, `UnloadImage`
+- **rtextures**: `LoadTexture`, `UnloadTexture`, `DrawTexture`, `DrawTextureEx`, `DrawTextureRec`, `DrawTexturePro`, render texture, `LoadImage`, `IsImageReady`, `Fade`, `ColorAlpha`, генераторы `GenImageGradientLinear/Radial/Square`, `GenImageChecked`, `GenImageWhiteNoise`, `GenImagePerlinNoise`, `GenImageCellular`, `LoadTextureFromImage`, `UnloadImage`
 - **rtext**: только `DrawText`, `DrawFPS`
 - **rmodels**: `LoadModel`, `UnloadModel`, `DrawModel`, `GetModelBoundingBox`, `DrawBoundingBox`, `DrawGrid`, `DrawCube`, `DrawCubeWires`, `SetModelTexture` (кастомный helper, не из raylib)
 - **raudio**: ничего
@@ -33,7 +33,7 @@
 | [task4.md](task4.md) | Экранные координаты, рендер, шейдеры | Основное завершено | `GetScreenToWorldRayEx` отсутствует в биндинге |
 | [task5.md](task5.md) | Примитивы и коллизии 2D | Высокий, начато | Следующие коллизии: `CheckCollisionCircleRec` и `CheckCollisionPointRec` |
 | [task6.md](task6.md) | Изображения (CPU) | Средний, начато | `ExportImage` и `GenImageColor` |
-| [task7.md](task7.md) | Текстуры и цвет | Средний | `Fade` и `ColorAlpha` |
+| [task7.md](task7.md) | Текстуры и цвет | Средний, начато | `IsTextureReady`, `SetTextureFilter`/`SetTextureWrap` |
 | [task8.md](task8.md) | Шрифты и текст | Средний | `MeasureText` для стандартного шрифта |
 | [task9.md](task9.md) | 3D-примитивы | Средний | `DrawLine3D`, `DrawSphere` |
 | [task10.md](task10.md) | Меши, материалы, анимации | Низкий | Пара простых 3D-коллизий без новых типов |

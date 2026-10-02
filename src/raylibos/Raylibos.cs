@@ -65,6 +65,18 @@ public class Raylibos : AutoContext<Raylibos>
         return COMWrapperContext.Create(color);
     }
 
+    [ContextMethod("ЦветСПрозрачностью", "Fade")]
+    public IValue Fade(IValue color, IValue alpha)
+    {
+        return COMWrapperContext.Create(Raylib.Fade(IValueToColor(color), IValueToFloat(alpha)));
+    }
+
+    [ContextMethod("АльфаЦвета", "ColorAlpha")]
+    public IValue ColorAlpha(IValue color, IValue alpha)
+    {
+        return COMWrapperContext.Create(Raylib.ColorAlpha(IValueToColor(color), IValueToFloat(alpha)));
+    }
+
     [ContextMethod("НовыйВектор", "NewVector2")]
     public IValue NewVector2(IValue x, IValue y)
     {
