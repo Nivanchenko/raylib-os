@@ -41,7 +41,7 @@ void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector
 ## Заметки по реализации
 - **Первый шаг выполнен:** `DrawLine3D` и `DrawSphere` с имеющимися `Vector3`/`Color`; расширен `src/test3d.os`, отдельный короткий пример — `src/test3dPrimitives.os`. Новые типы и ассеты не требуются.
 - `DrawModel` сейчас принимает только uniform `scale: float` — `DrawModelEx` даёт полный контроль (позиция/ось поворота/угол/неравномерный масштаб по осям) и логично реализовывать сразу после текущего `DrawModel`.
-- `Ray` — новый marshalable-тип (`Vector3 position, Vector3 direction`); `NewRay`/`IValueToRay` добавить отдельным шагом вместе с первым использующим его методом (`DrawRay`, `GetScreenToWorldRay` или raycast-коллизия из `task10.md`).
+- `Ray` уже возвращается через `ЛучИзЭкрана` (`task4.md`), доступны `ЛучПозиция`/`ЛучНаправление`. Для `DrawRay` и raycast-коллизий из `task10.md` нужен `IValueToRay`; конструктор `NewRay` добавлять только если потребуется создать луч без камеры.
 - Билборды — часто используются для спрайтов в 3D-сценах (частицы, HP-бары над персонажами) — не самый экзотический кейс, приоритет чуть выше остальных в этой задаче.
 
 ## Тестовый скрипт

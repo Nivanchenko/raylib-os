@@ -17,6 +17,7 @@ Mesh GenMeshCone(float radius, float height, int slices);
 Mesh GenMeshTorus(float radius, float size, int radSeg, int sides);
 Mesh GenMeshHeightmap(Image heightmap, Vector3 size);
 ```
+Также в raylib-cs 6.0.0 есть `GenMeshHemiSphere`, `GenMeshKnot`, `GenMeshCubicmap` — не обёрнуты, добавлять отдельными шагами при необходимости.
 
 ### Меши и модель из меша
 ```c
@@ -26,6 +27,7 @@ void UnloadMesh(Mesh mesh);
 void DrawMesh(Mesh mesh, Material material, Matrix transform);
 BoundingBox GetMeshBoundingBox(Mesh mesh);
 ```
+Продвинутое управление мешами (`UploadMesh`, `UpdateMeshBuffer`, `DrawMeshInstanced`, `GenMeshTangents`, `ExportMesh`) тоже пока отсутствует; указатели/матрицы экземпляров и владение буферами требуют отдельного исследования.
 
 ### Материалы
 ```c
@@ -35,6 +37,7 @@ void UnloadMaterial(Material material);
 void SetMaterialTexture(Material *material, int mapType, Texture2D texture);
 void SetModelMeshMaterial(Model *model, int meshId, int materialId);
 ```
+`LoadMaterials` возвращает массив указателей с нативным владением; не оборачивать без стратегии освобождения каждого ресурса. Этот метод тоже пока отсутствует.
 
 ### Анимации
 ```c
@@ -53,6 +56,7 @@ RayCollision GetRayCollisionSphere(Ray ray, Vector3 center, float radius);
 RayCollision GetRayCollisionBox(Ray ray, BoundingBox box);
 RayCollision GetRayCollisionMesh(Ray ray, Mesh mesh, Matrix transform);
 RayCollision GetRayCollisionTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3);
+RayCollision GetRayCollisionQuad(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4);
 ```
 
 ## Заметки по реализации

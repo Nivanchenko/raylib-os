@@ -44,7 +44,7 @@ void DrawSplineBasis(const Vector2 *points, int pointCount, float thick, Color c
 void DrawSplineCatmullRom(const Vector2 *points, int pointCount, float thick, Color color);
 void DrawSplineBezierQuadratic(const Vector2 *points, int pointCount, float thick, Color color);
 void DrawSplineBezierCubic(const Vector2 *points, int pointCount, float thick, Color color);
-// Get*SplinePoint* — низкий приоритет, добавлять только по запросу
+// Отдельные DrawSplineSegment* и GetSplinePoint* вынесены в task14.md
 ```
 
 ### Коллизии (важно для игр)
@@ -67,6 +67,7 @@ Rectangle GetCollisionRec(Rectangle rec1, Rectangle rec2);
 - Точки для сплайнов/`CheckCollisionPointPoly` передаются как массивы `Vector2` — переиспользуй уже готовый паттерн маршалинга массива из `DrawLineStrip`/`DrawTriangleFan`/`DrawTriangleStrip` (`COMWrapperContext.MarshalIValue` → `dynamic array` → `fixed (Vector2* ptr = ...)`).
 - `CheckCollisionLines` — `Vector2 *collisionPoint` возвращается по ссылке; в OneScript сделать это через возврат структуры (например, `IValue` с массивом из `[найдено, точка]` или отдельными методами `ЛинииПересекаются`/`ТочкаПересеченияЛиний`).
 - Коллизии полезно реализовать рано, но замена алгоритмов `examples/physics/Модули/ПомошникКолизий.os` — отдельная задача после проверки эквивалентности поведения.
+- `SetShapesTexture` и вычисление точек отдельных сплайнов — в [task14.md](task14.md); не смешивать их с коллизиями.
 
 ## Тестовый скрипт
 `src/testCollisions.os` — положительные/отрицательные проверки коллизий и оконное демо с изменением цвета фигур при пересечении с курсором (`CheckCollisionCircles`/`CheckCollisionRecs`).

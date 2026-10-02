@@ -1,7 +1,7 @@
 # Task 11 — raudio: звуковые эффекты и потоковая музыка
 
 **Модуль:** raudio
-**Приоритет:** низкий/по потребности — но если библиотека претендует на "полноценные графические приложения (в т.ч. игры)" (см. README), звук — единственный полностью отсутствующий крупный модуль.
+**Приоритет:** низкий/по потребности — базовое воспроизведение коротких звуков уже есть, потоковая музыка и продвинутое управление звуком всё ещё нужны для игровых сценариев.
 **Статус:** реализованы `InitAudioDevice`/`IsAudioDeviceReady`/`CloseAudioDevice` и `LoadSound`/`IsSoundReady`/`PlaySound`/`UnloadSound`. Остальные операции с эффектами, потоковая музыка, AudioStream и Wave пока не реализованы.
 
 ## Что реализовать (минимальный жизнеспособный набор)
@@ -54,6 +54,7 @@ void PlayAudioStream(AudioStream stream);
 bool IsAudioStreamPlaying(AudioStream stream);
 void StopAudioStream(AudioStream stream);
 ```
+Также не обёрнуты `UpdateAudioStream`, `IsAudioStreamProcessed`, `PauseAudioStream`, `ResumeAudioStream`, `SetAudioStreamVolume`, `SetAudioStreamPitch`, `SetAudioStreamPan`, `SetAudioStreamBufferSizeDefault` и callback/processor API (`SetAudioStreamCallback`, `AttachAudioStreamProcessor`, `DetachAudioStreamProcessor`, `AttachAudioMixedProcessor`, `DetachAudioMixedProcessor`). Последнее требует аудиопотока, безопасного владения делегатами и буферов; не реализовывать по аналогии с `PlaySound`.
 
 ### Wave (низкоуровневая работа с сэмплами) — низкий приоритет, отложить
 ```c
@@ -61,6 +62,7 @@ Wave LoadWave(const char *fileName);
 Sound LoadSoundFromWave(Wave wave);
 void UnloadWave(Wave wave);
 ```
+Для Wave пока также отсутствуют `LoadWaveFromMemory`, `ExportWave`, `ExportWaveAsCode`, `WaveCopy`, `WaveCrop`, `WaveFormat`, `LoadWaveSamples`, `UnloadWaveSamples`; для Sound — `LoadSoundAlias`, `UnloadSoundAlias` (разделяемые сэмплы) и `UpdateSound`; для Music — `LoadMusicStreamFromMemory`, `SeekMusicStream`, `SetMusicPitch`, `SetMusicPan`. Сначала проверить владение ресурсом, порядок выгрузки алиаса и источника. `IsWaveValid` из более нового `basic_api.md` в биндинге 6.0.0 отсутствует (имя проверки в биндинге — `IsWaveReady`).
 
 ## Заметки по реализации
 - **Первый шаг выполнен:** `InitAudioDevice`/`IsAudioDeviceReady`/`CloseAudioDevice` и `LoadSound`/`IsSoundReady`/`PlaySound`/`UnloadSound`; пример выгружает Sound до закрытия устройства. На поставляемой нативной raylib 5.5 проверка готовности называется `IsSoundValid`, а в raylib-cs 6.0.0 — `IsSoundReady`; обёртка поддерживает оба имени. `Music`/`AudioStream` остаются отдельными шагами.

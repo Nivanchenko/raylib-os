@@ -52,6 +52,6 @@ void UnloadShader(Shader shader);
 - Для экранного луча биндинг использует имя `GetMouseRay`, для проверок готовности — `IsShaderReady`/`IsRenderTextureReady`. Поставляемая нативная raylib 5.5 экспортирует новые имена (`GetScreenToWorldRay`, `IsShaderValid`, `IsRenderTextureValid`); обёртка при отсутствии старого символа вызывает новый. Все методы имеют русское имя и английский alias.
 
 ## Тестовый скрипт
-`src/testShaderMode.os` — загрузка и применение шейдера; файла шейдера в `resources/` пока нет, потребуется добавить подходящий пример или использовать `LoadShaderFromMemory`.
+`src/testShaderMode.os` — загрузка GLSL из строк через `LoadShaderFromMemory`, установка uniform и применение шейдера; отдельного файла в `resources/` не требуется.
 `src/testRenderTexture.os` — рендер сцены в `RenderTexture2D` через `BeginTextureMode`, затем отрисовка результата как обычной текстуры.
 `src/testCameraCoords.os` — преобразования координат и луч через 3D-камеру.
