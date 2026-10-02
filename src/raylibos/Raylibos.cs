@@ -428,6 +428,12 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawText(text, posX, posY, fontSize, IValueToColor(color));
     }
 
+    [ContextMethod("ИзмеритьТекст", "MeasureText")]
+    public int MeasureText(string text, int fontSize)
+    {
+        return Raylib.MeasureText(text, fontSize);
+    }
+
     [ContextMethod("НарисоватьКруг", "DrawCircle")]
     public void DrawCircle(int centerX, int centerY, IValue radius, IValue color)
     {
