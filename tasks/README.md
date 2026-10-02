@@ -15,7 +15,7 @@
 - **rcore / камера**: `BeginMode2D`/`EndMode2D`, `BeginMode3D`/`EndMode3D`, `UpdateCamera` (3D), собственные конструкторы `NewCamera2D`/`NewCamera3D` + геттеры полей Camera2D, преобразования координат 2D/3D, экранный луч и матрицы камеры
 - **rcore / режимы и шейдеры**: render texture, `Begin/EndTextureMode`, `Begin/EndShaderMode`, `Begin/EndBlendMode`, `Begin/EndScissorMode`, загрузка шейдеров, uniform float/int/Vector2/Vector3/float[]/матрица/текстура
 - **rcore / random**: `GetRandomValue`
-- **rshapes**: `DrawCircle`, `DrawCircleGradient`, `DrawCircleLines`, `DrawEllipse`, `DrawEllipseLines`, `DrawRectangle`, `DrawRectangleLines`, `DrawRectangleGradientV/H`, `DrawRectanglePro`, `DrawTriangle`, `DrawTriangleLines`, `DrawLine`, `DrawLineStrip`, `DrawTriangleFan`, `DrawTriangleStrip`, `DrawPoly`, `DrawPolyLines`, `DrawPolyLinesEx`
+- **rshapes**: `DrawCircle`, `DrawCircleGradient`, `DrawCircleLines`, `DrawEllipse`, `DrawEllipseLines`, `DrawRectangle`, `DrawRectangleLines`, `DrawRectangleGradientV/H`, `DrawRectanglePro`, `DrawTriangle`, `DrawTriangleLines`, `DrawLine`, `DrawLineStrip`, `DrawTriangleFan`, `DrawTriangleStrip`, `DrawPoly`, `DrawPolyLines`, `DrawPolyLinesEx`, `CheckCollisionRecs`, `CheckCollisionCircles`
 - **rtextures**: `LoadTexture`, `UnloadTexture`, `DrawTexture`, `DrawTextureEx`, `DrawTextureRec`, `DrawTexturePro`, render texture, генераторы `GenImageGradientLinear/Radial/Square`, `GenImageChecked`, `GenImageWhiteNoise`, `GenImagePerlinNoise`, `GenImageCellular`, `LoadTextureFromImage`, `UnloadImage`
 - **rtext**: только `DrawText`, `DrawFPS`
 - **rmodels**: `LoadModel`, `UnloadModel`, `DrawModel`, `GetModelBoundingBox`, `DrawBoundingBox`, `DrawGrid`, `DrawCube`, `DrawCubeWires`, `SetModelTexture` (кастомный helper, не из raylib)
@@ -31,7 +31,7 @@
 | [task2.md](task2.md) | Тайминг, курсор | Основное завершено | `LoadRandomSequence`/`UnloadRandomSequence` — по потребности |
 | [task3.md](task3.md) | Ввод | Основное завершено | `GetKeyName`/`SetGamepadVibration` отсутствуют в биндинге; проверить на физических устройствах |
 | [task4.md](task4.md) | Экранные координаты, рендер, шейдеры | Основное завершено | `GetScreenToWorldRayEx` отсутствует в биндинге |
-| [task5.md](task5.md) | Примитивы и коллизии 2D | Высокий | `CheckCollisionRecs` и `CheckCollisionCircles` |
+| [task5.md](task5.md) | Примитивы и коллизии 2D | Высокий, начато | Следующие коллизии: `CheckCollisionCircleRec` и `CheckCollisionPointRec` |
 | [task6.md](task6.md) | Изображения (CPU) | Средний | `LoadImage`, `IsImageReady` |
 | [task7.md](task7.md) | Текстуры и цвет | Средний | `Fade` и `ColorAlpha` |
 | [task8.md](task8.md) | Шрифты и текст | Средний | `MeasureText` для стандартного шрифта |

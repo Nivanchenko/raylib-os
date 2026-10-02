@@ -565,6 +565,18 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.DrawPolyLinesEx(IValueToVector2(center), sides, IValueToFloat(radius), IValueToFloat(rotation), IValueToFloat(thickness), IValueToColor(color));
     }
 
+    [ContextMethod("ПересекаютсяПрямоугольники", "CheckCollisionRecs")]
+    public bool CheckCollisionRecs(IValue rec1, IValue rec2)
+    {
+        return Raylib.CheckCollisionRecs(IValueToRectangle(rec1), IValueToRectangle(rec2));
+    }
+
+    [ContextMethod("ПересекаютсяКруги", "CheckCollisionCircles")]
+    public bool CheckCollisionCircles(IValue center1, IValue radius1, IValue center2, IValue radius2)
+    {
+        return Raylib.CheckCollisionCircles(IValueToVector2(center1), IValueToFloat(radius1), IValueToVector2(center2), IValueToFloat(radius2));
+    }
+
     [ContextMethod("НовыйВектор3", "NewVector3")]
     public IValue NewVector3(IValue x, IValue y, IValue z)
     {
