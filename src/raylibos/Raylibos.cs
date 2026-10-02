@@ -878,6 +878,18 @@ public class Raylibos : AutoContext<Raylibos>
         Raylib.UnloadShader(IValueToShader(shader));
     }
 
+    [ContextMethod("НарисоватьЛинию3D", "DrawLine3D")]
+    public void DrawLine3D(IValue startPos, IValue endPos, IValue color)
+    {
+        Raylib.DrawLine3D(IValueToVector3(startPos), IValueToVector3(endPos), IValueToColor(color));
+    }
+
+    [ContextMethod("НарисоватьСферу", "DrawSphere")]
+    public void DrawSphere(IValue centerPos, IValue radius, IValue color)
+    {
+        Raylib.DrawSphere(IValueToVector3(centerPos), IValueToFloat(radius), IValueToColor(color));
+    }
+
     [ContextMethod("НарисоватьКуб", "DrawCube")]
     public void DrawCube(IValue position, IValue width, IValue height, IValue length, IValue color)
     {

@@ -2,7 +2,7 @@
 
 **Модуль:** rmodels (Basic geometric 3D shapes + Model drawing extended)
 **Приоритет:** средний — куб/линия сетки уже есть, но сферы/цилиндры/капсулы/биллборды и расширенные варианты `DrawModel*` отсутствуют.
-**Статус:** реализовано `DrawCube`, `DrawCubeWires`, `DrawGrid`, `DrawModel`, `DrawBoundingBox`.
+**Статус:** реализованы `DrawCube`, `DrawCubeWires`, `DrawGrid`, `DrawModel`, `DrawBoundingBox`, `DrawLine3D`, `DrawSphere`. Остальные 3D-примитивы и расширенные варианты рисования модели пока не реализованы.
 
 ## Что реализовать
 
@@ -39,10 +39,10 @@ void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector
 ```
 
 ## Заметки по реализации
-- **Первый шаг:** `DrawLine3D` и `DrawSphere` с имеющимися `Vector3`/`Color`; расширить `src/test3d.os` без новых типов/ассетов.
+- **Первый шаг выполнен:** `DrawLine3D` и `DrawSphere` с имеющимися `Vector3`/`Color`; расширен `src/test3d.os`, отдельный короткий пример — `src/test3dPrimitives.os`. Новые типы и ассеты не требуются.
 - `DrawModel` сейчас принимает только uniform `scale: float` — `DrawModelEx` даёт полный контроль (позиция/ось поворота/угол/неравномерный масштаб по осям) и логично реализовывать сразу после текущего `DrawModel`.
 - `Ray` — новый marshalable-тип (`Vector3 position, Vector3 direction`); `NewRay`/`IValueToRay` добавить отдельным шагом вместе с первым использующим его методом (`DrawRay`, `GetScreenToWorldRay` или raycast-коллизия из `task10.md`).
 - Билборды — часто используются для спрайтов в 3D-сценах (частицы, HP-бары над персонажами) — не самый экзотический кейс, приоритет чуть выше остальных в этой задаче.
 
 ## Тестовый скрипт
-`src/test3dPrimitives.os` — сфера, цилиндр, капсула и плоскость на одной сцене с орбитальной камерой (расширение существующего `test3d.os`).
+`src/test3dPrimitives.os` — сфера и линия в 3D-сцене с камерой; цилиндр, капсула и плоскость останутся отдельным шагом.
