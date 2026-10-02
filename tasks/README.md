@@ -12,6 +12,7 @@
 - **rcore / курсор**: `ShowCursor`, `HideCursor`, `IsCursorHidden`
 - **rcore / тайминг и misc**: `GetFrameTime`, `GetTime`, `GetFPS`, `WaitTime`, `SetRandomSeed`, `TakeScreenshot`, `SetConfigFlags`, `OpenURL`, `EnableCursor`, `DisableCursor`, `IsCursorOnScreen`
 - **rcore / ввод**: клавиатура (`IsKeyPressed/Repeat/Down/Released/Up`, `GetKeyPressed`, `GetCharPressed`, `SetExitKey`), мышь (`IsMouseButton*`, `Get/SetMouse*`), геймпад, касания и жесты из `task3.md` (кроме методов, отсутствующих в raylib-cs 6.0.0)
+- **rcore / файлы**: `IsFileDropped` и `GetDroppedFiles` с копированием путей в массив OneScript
 - **rcore / камера**: `BeginMode2D`/`EndMode2D`, `BeginMode3D`/`EndMode3D`, `UpdateCamera` (3D), собственные конструкторы `NewCamera2D`/`NewCamera3D` + геттеры полей Camera2D, преобразования координат 2D/3D, экранный луч и матрицы камеры
 - **rcore / режимы и шейдеры**: render texture, `Begin/EndTextureMode`, `Begin/EndShaderMode`, `Begin/EndBlendMode`, `Begin/EndScissorMode`, загрузка шейдеров, uniform float/int/Vector2/Vector3/float[]/матрица/текстура
 - **rcore / random**: `GetRandomValue`
@@ -38,7 +39,7 @@
 | [task9.md](task9.md) | 3D-примитивы | Средний, начато | `DrawSphereWires`, `DrawCylinder` |
 | [task10.md](task10.md) | Меши, материалы, анимации | Низкий, начато | `CheckCollisionBoxSphere` или генерация мешей при необходимости |
 | [task11.md](task11.md) | Аудио | По потребности, начато | Настройки `Sound` и потоковая музыка — отдельно |
-| [task12.md](task12.md) | Файлы, automation | По потребности | Перетаскивание файлов в окно |
+| [task12.md](task12.md) | Файлы, automation | Основной шаг сделан | Проверить на реальном drag&drop; прочее — только по запросу |
 
 ## Общие правила для всех задач
 

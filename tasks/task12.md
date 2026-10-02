@@ -2,6 +2,7 @@
 
 **Модуль:** rcore (File system management / Compression-Encoding / Automation events / Logging / Memory management)
 **Приоритет:** низкий — OneScript уже имеет средства работы с файлами; обёртывать стоит только то, чего не хватает или что специфично для raylib-сценариев (например, drag&drop файлов в окно; скриншоты — в `task2.md`).
+**Статус:** реализованы `IsFileDropped` и `GetDroppedFiles` (копирование путей в `Массив` OneScript с гарантированной выгрузкой `FilePathList`). Остальные файловые утилиты, кодирование и automation events остаются вне обёртки.
 
 ## Что реализовать (если понадобится)
 
@@ -51,7 +52,7 @@ void PlayAutomationEvent(AutomationEvent event);
 ```
 
 ## Заметки по реализации
-- **Первый шаг:** `IsFileDropped` и метод, который вызывает `LoadDroppedFiles`, копирует имена в `Массив` строк OneScript и гарантированно вызывает `UnloadDroppedFiles`. Проверить порядок и форму результата по raylib-cs 6.0.0.
+- **Первый шаг выполнен:** `IsFileDropped` и метод `GetDroppedFiles`, который вызывает `LoadDroppedFiles`, копирует UTF-8 пути в `Массив` строк OneScript и освобождает `FilePathList` в `finally`. Формат результата и тип `Paths` сверены с raylib-cs 6.0.0. Пустой список проверен в `src/testDropFiles.os`; получение реальных путей при перетаскивании требует ручной проверки.
 - `FilePathList` содержит нативный ресурс; нельзя вернуть его напрямую или забыть вызвать `UnloadDroppedFiles` после копирования строк.
 - Оставшиеся пункты (File system общего назначения, TraceLog, сжатие, automation events) реализовывать только по явному запросу — не делать "на всякий случай".
 

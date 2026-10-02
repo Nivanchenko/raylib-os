@@ -4,6 +4,7 @@ using ScriptEngine.Machine;
 using Raylib_cs;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using OneScript.StandardLibrary.Collections;
 
 namespace raylibos;
 
@@ -1621,6 +1622,29 @@ public class Raylibos : AutoContext<Raylibos>
     public void UnloadSound(IValue sound)
     {
         Raylib.UnloadSound(IValueToSound(sound));
+    }
+
+    [ContextMethod("ФайлПеретащен", "IsFileDropped")]
+    public bool IsFileDropped()
+    {
+        return Raylib.IsFileDropped();
+    }
+
+    [ContextMethod("ПолучитьПеретащенныеФайлы", "GetDroppedFiles")]
+    public unsafe IValue GetDroppedFiles()
+    {
+        FilePathList files = Raylib.LoadDroppedFiles();
+        try
+        {
+            ArrayImpl paths = ArrayImpl.Constructor();
+            for (uint i = 0; i < files.Count; i++)
+                paths.Add(ValueFactory.Create(Marshal.PtrToStringUTF8((IntPtr)files.Paths[i]) ?? string.Empty));
+            return paths;
+        }
+        finally
+        {
+            Raylib.UnloadDroppedFiles(files);
+        }
     }
 
     // Вспомогательные функции
