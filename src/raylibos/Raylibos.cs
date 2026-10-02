@@ -935,6 +935,24 @@ public class Raylibos : AutoContext<Raylibos>
         return COMWrapperContext.Create(bounds);
     }
 
+    [ContextMethod("НовыйОграничивающийБокс", "NewBoundingBox")]
+    public IValue NewBoundingBox(IValue min, IValue max)
+    {
+        return COMWrapperContext.Create(new BoundingBox(IValueToVector3(min), IValueToVector3(max)));
+    }
+
+    [ContextMethod("ПересекаютсяСферы", "CheckCollisionSpheres")]
+    public bool CheckCollisionSpheres(IValue center1, IValue radius1, IValue center2, IValue radius2)
+    {
+        return Raylib.CheckCollisionSpheres(IValueToVector3(center1), IValueToFloat(radius1), IValueToVector3(center2), IValueToFloat(radius2));
+    }
+
+    [ContextMethod("ПересекаютсяБоксы", "CheckCollisionBoxes")]
+    public bool CheckCollisionBoxes(IValue box1, IValue box2)
+    {
+        return Raylib.CheckCollisionBoxes(IValueToBoundingBox(box1), IValueToBoundingBox(box2));
+    }
+
     [ContextMethod("НарисоватьОграничивающийБокс", "DrawBoundingBox")]
     public void DrawBoundingBox(IValue box, IValue color)
     {

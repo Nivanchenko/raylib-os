@@ -2,7 +2,7 @@
 
 **Модуль:** rmodels (Mesh management / Mesh generation / Materials / Animations / Collision detection)
 **Приоритет:** низкий — продвинутые сценарии (процедурная генерация геометрии, скелетная анимация), нужны только если проект пойдёт в сторону полноценных 3D-игр, а не только 2D + простые 3D-сцены.
-**Статус:** методы из перечисленных ниже разделов пока не реализованы; `LoadModel` и пользовательский `SetModelTexture` уже есть в `Raylibos.cs`.
+**Статус:** реализованы `CheckCollisionSpheres`, `CheckCollisionBoxes` и конструктор `NewBoundingBox`; `LoadModel` и пользовательский `SetModelTexture` уже были в `Raylibos.cs`. Генерация мешей, материалы, анимации и raycast-коллизии пока не реализованы.
 
 ## Что реализовать
 
@@ -56,10 +56,11 @@ RayCollision GetRayCollisionTriangle(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3
 ```
 
 ## Заметки по реализации
-- **Первый шаг:** `CheckCollisionSpheres`/`CheckCollisionBoxes`, используя существующие `Vector3`/`BoundingBox` (можно переиспользовать `GetModelBoundingBox`); проверка результата на пересекающихся и непересекающихся объектах.
+- **Первый шаг выполнен:** `CheckCollisionSpheres`/`CheckCollisionBoxes` используют существующие `Vector3`/`BoundingBox`; для боксов добавлен `NewBoundingBox(min, max)`. `src/testCollisions3D.os` проверяет пересекающиеся и непересекающиеся объекты и рисует 3D-сцену.
 - `LoadModelAnimations` возвращает массив с отдельными правилами владения памятью; перед обёрткой определить, как освободить все анимации ровно один раз. Не превращать указатель в `Массив` OneScript до проверки контракта raylib-cs.
 - Raycast-коллизии используют `Ray` из шага по `task9.md` и возвращают новый тип `RayCollision`; делать отдельно от простых проверок. При `LoadModelFromMesh` отдельно проверить владение мешем после создания модели во избежание двойной выгрузки.
 - Это самая нишевая и трудоёмкая часть API (полноценная поддержка skeletal animation) — приступать в последнюю очередь, только по явному запросу.
 
 ## Тестовый скрипт
+`src/testCollisions3D.os` — проверки сфер и боксов, автоматическое закрытие окна.
 `src/testMeshGen.os` — процедурная генерация сферы/тора через `GenMeshSphere`/`GenMeshTorus`, отрисовка через `LoadModelFromMesh`+`DrawModel`.

@@ -18,7 +18,7 @@
 - **rshapes**: `DrawCircle`, `DrawCircleGradient`, `DrawCircleLines`, `DrawEllipse`, `DrawEllipseLines`, `DrawRectangle`, `DrawRectangleLines`, `DrawRectangleGradientV/H`, `DrawRectanglePro`, `DrawTriangle`, `DrawTriangleLines`, `DrawLine`, `DrawLineStrip`, `DrawTriangleFan`, `DrawTriangleStrip`, `DrawPoly`, `DrawPolyLines`, `DrawPolyLinesEx`, `CheckCollisionRecs`, `CheckCollisionCircles`
 - **rtextures**: `LoadTexture`, `UnloadTexture`, `DrawTexture`, `DrawTextureEx`, `DrawTextureRec`, `DrawTexturePro`, render texture, `LoadImage`, `IsImageReady`, `Fade`, `ColorAlpha`, генераторы `GenImageGradientLinear/Radial/Square`, `GenImageChecked`, `GenImageWhiteNoise`, `GenImagePerlinNoise`, `GenImageCellular`, `LoadTextureFromImage`, `UnloadImage`
 - **rtext**: `DrawText`, `DrawFPS`, `MeasureText` для стандартного шрифта
-- **rmodels**: `LoadModel`, `UnloadModel`, `DrawModel`, `GetModelBoundingBox`, `DrawBoundingBox`, `DrawGrid`, `DrawCube`, `DrawCubeWires`, `DrawLine3D`, `DrawSphere`, `SetModelTexture` (кастомный helper, не из raylib)
+- **rmodels**: `LoadModel`, `UnloadModel`, `DrawModel`, `GetModelBoundingBox`, `DrawBoundingBox`, `DrawGrid`, `DrawCube`, `DrawCubeWires`, `DrawLine3D`, `DrawSphere`, `CheckCollisionSpheres`, `CheckCollisionBoxes`, `NewBoundingBox`, `SetModelTexture` (кастомный helper, не из raylib)
 - **raudio**: ничего
 
 ## Задачи на реализацию недостающего
@@ -36,7 +36,7 @@
 | [task7.md](task7.md) | Текстуры и цвет | Средний, начато | `IsTextureReady`, `SetTextureFilter`/`SetTextureWrap` |
 | [task8.md](task8.md) | Шрифты и текст | Средний, начато | `GetFontDefault` и `MeasureTextEx` |
 | [task9.md](task9.md) | 3D-примитивы | Средний, начато | `DrawSphereWires`, `DrawCylinder` |
-| [task10.md](task10.md) | Меши, материалы, анимации | Низкий | Пара простых 3D-коллизий без новых типов |
+| [task10.md](task10.md) | Меши, материалы, анимации | Низкий, начато | `CheckCollisionBoxSphere` или генерация мешей при необходимости |
 | [task11.md](task11.md) | Аудио | По потребности | Устройство + короткий `Sound` |
 | [task12.md](task12.md) | Файлы, automation | По потребности | Перетаскивание файлов в окно |
 
