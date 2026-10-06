@@ -11,6 +11,7 @@ out vec4 baseColor;
 void main()
 {
     // DrawCube uses world-space vertices and has no per-cube model matrix.
+    // Pass them through unchanged so fragment detail is continuous across voxels.
     worldPosition = vertexPosition;
     baseColor = vertexColor;
     gl_Position = mvp * vec4(vertexPosition, 1.0);

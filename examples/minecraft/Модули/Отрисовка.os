@@ -84,6 +84,8 @@
             DX = Блок.X - ПозицияИгрока.X;
             DY = Блок.Y - ПозицияИгрока.Y;
             DZ = Блок.Z - ПозицияИгрока.Z;
+            // The material groups remain cached by world version; camera motion
+            // only changes this squared-distance visibility test.
             Если DX * DX + DY * DY + DZ * DZ <= 576 Тогда
                 КонтекстRaylib.НарисоватьКуб(Блок.Позиция, 1, 1, 1, Блок.Цвет);
                 ЧислоНарисованныхКубов = ЧислоНарисованныхКубов + 1;
